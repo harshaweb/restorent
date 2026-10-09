@@ -1,0 +1,21 @@
+{
+  "name": "resto",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:backend": "node server.mjs",
+    "dev:full": "node scripts/dev-full.mjs",
+    "build": "vite build",
+    "start": "node server.mjs",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "prod": "npm run build && npm start",
+    "start:prod": "NODE_ENV=production node server.mjs"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.2",
+    "vite": "^8.2.2"
+  }
+}
