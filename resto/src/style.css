@@ -10306,3 +10306,9 @@ main:has(> #cart:target) .cart-page-head {
     width: 100%;
   }
 }
+
+@media (max-width: 760px) {
+  .nav-cart {
+    width: auto !important;
+  }
+}

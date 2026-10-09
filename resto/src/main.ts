@@ -1,4 +1,5 @@
 import './style.css'
+import './mobile.css'
 import { apiRequest, escapeHtml, safeImageUrl } from './api'
 import { defaultStoreSettings, type StoreSettings, type Coupon, type Offer } from './store'
 
@@ -49,11 +50,6 @@ type SiteSection = {
   subtitle: string
   buttonText?: string
   buttonHref?: string
-}
-
-type HealthResponse = {
-  ok: boolean
-  service: string
 }
 
 type RazorpayGatewayOrder = {
@@ -694,8 +690,8 @@ const app = document.querySelector<HTMLDivElement>('#app')!
 app.innerHTML = `
   <header class="site-header">
     <a class="brand" href="#home" aria-label="Amit's Food Hub home"><img src="/amit-food-hub-logo.jpeg" alt="Amit's Food Hub logo" /><span>Amit's Food Hub</span></a>
-    <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">Menu</button>
-    <nav class="site-nav" aria-label="Primary navigation">
+    <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-controls="primary-navigation" aria-expanded="false">Menu</button>
+    <nav class="site-nav" id="primary-navigation" aria-label="Primary navigation">
       <a href="#home">Home</a>
       <a href="#menu">Menu</a>
       <a href="#offers">Offers</a>
@@ -703,8 +699,6 @@ app.innerHTML = `
       <a href="#reviews">Reviews</a>
       <a href="#booking">Reserve</a>
       <a href="#contact">Contact</a>
-      <a href="/admin.html">Admin</a>
-      <span class="backend-status" id="backend-status" aria-live="polite">Connecting</span>
       <div class="header-cart-wrap">
         <a class="nav-cart" href="#cart">Cart <span id="nav-cart-count">0</span></a>
         <div class="header-cart-summary" aria-live="polite">
@@ -897,8 +891,8 @@ app.innerHTML = `
           <a class="cart-add-more" href="#menu">Add more</a>
         </div>
         <div class="cart-mode" role="tablist" aria-label="Cart and checkout options">
-          <button class="active" id="cart-tab" type="button" data-cart-view="cart">Cart</button>
-          <button id="checkout-tab" type="button" data-cart-view="checkout">Checkout</button>
+          <button class="active" id="cart-tab" type="button" role="tab" aria-selected="true" aria-controls="cart-view" data-cart-view="cart">Cart</button>
+          <button id="checkout-tab" type="button" role="tab" aria-selected="false" aria-controls="checkout-view" data-cart-view="checkout">Checkout</button>
         </div>
         <div class="cart-intro-card">
           <span>Your order</span>
@@ -925,10 +919,10 @@ app.innerHTML = `
         <div class="cart-view" id="checkout-view">
         <form class="checkout-form" id="checkout-form">
           <div class="form-row">
-            <label><span>Name</span><input name="name" required placeholder="Your name" /></label>
-            <label><span>Phone</span><input name="phone" required placeholder="Mobile number" /></label>
+            <label><span>Name</span><input name="name" autocomplete="name" required placeholder="Your name" /></label>
+            <label><span>Phone</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="Mobile number" /></label>
           </div>
-          <label><span>Address or pickup note</span><textarea name="address" placeholder="Delivery address, table note, or pickup time"></textarea></label>
+          <label><span>Address or pickup note</span><textarea name="address" autocomplete="street-address" placeholder="Delivery address, table note, or pickup time"></textarea></label>
           <fieldset class="fulfillment-options">
             <legend>Order type</legend>
             <label><input type="radio" name="orderType" value="Delivery" checked /> <span>Delivery</span><small>Send to my address</small></label>
@@ -1028,8 +1022,8 @@ app.innerHTML = `
       <div class="booking-panel">
         <form class="booking-form" id="booking-form">
           <div class="form-row">
-            <label><span>Name</span><input name="bookingName" required placeholder="Your name" /></label>
-            <label><span>Phone</span><input name="bookingPhone" required inputmode="tel" placeholder="Mobile number" /></label>
+            <label><span>Name</span><input name="bookingName" autocomplete="name" required placeholder="Your name" /></label>
+            <label><span>Phone</span><input name="bookingPhone" type="tel" required inputmode="tel" autocomplete="tel" placeholder="Mobile number" /></label>
           </div>
           <div class="form-row">
             <label><span>Date</span><input name="bookingDate" type="date" required /></label>
@@ -1070,11 +1064,16 @@ app.innerHTML = `
         </div>
       </div>
       <form class="newsletter-form" id="newsletter-form">
-        <label><span>Get offers</span><input name="email" type="email" required placeholder="Email address" /></label>
+        <label><span>Get offers</span><input name="email" type="email" autocomplete="email" required placeholder="Email address" /></label>
         <button type="submit">Subscribe</button>
       </form>
     </section>
   </main>
+
+  <nav class="mobile-order-bar" aria-label="Mobile ordering">
+    <a href="#menu" class="mobile-menu-link">Browse menu</a>
+    <a href="#cart" class="mobile-cart-link"><span>Cart <span id="mobile-cart-count">0</span></span><strong id="mobile-cart-total">₹0</strong></a>
+  </nav>
 
   <div class="product-modal" id="product-modal" aria-hidden="true">
     <div class="product-modal-backdrop" data-close-product></div>
@@ -1127,20 +1126,6 @@ const gatewayStatus = document.querySelector<HTMLElement>('#gateway-status')!
 const gatewayTotal = document.querySelector<HTMLElement>('#gateway-total')!
 const verifyPaymentButton = document.querySelector<HTMLButtonElement>('#verify-payment')!
 const checkoutForm = document.querySelector<HTMLFormElement>('#checkout-form')!
-const backendStatus = document.querySelector<HTMLElement>('#backend-status')!
-async function checkBackendConnection() {
-  try {
-    const health = await apiRequest<HealthResponse>('/api/health')
-    backendStatus.textContent = health.ok ? 'Backend connected' : 'Backend issue'
-    backendStatus.classList.toggle('connected', Boolean(health.ok))
-    backendStatus.classList.toggle('offline', !health.ok)
-  } catch {
-    backendStatus.textContent = 'Backend offline'
-    backendStatus.classList.remove('connected')
-    backendStatus.classList.add('offline')
-  }
-}
-
 function syncPageMode() {
   const isCartPage = window.location.hash === '#cart' || window.location.hash === '#order'
   document.body.classList.toggle('cart-page-active', isCartPage)
@@ -1156,6 +1141,8 @@ function setCartView(view: 'cart' | 'checkout') {
   const isCheckout = view === 'checkout'
   cartTab.classList.toggle('active', !isCheckout)
   checkoutTab.classList.toggle('active', isCheckout)
+  cartTab.setAttribute('aria-selected', String(!isCheckout))
+  checkoutTab.setAttribute('aria-selected', String(isCheckout))
   cartView.classList.toggle('active', !isCheckout)
   checkoutView.classList.toggle('active', isCheckout)
 }
@@ -1460,7 +1447,7 @@ function renderMenu() {
     ? items.map((item) => `
         <article class="dish-card">
           <div class="dish-photo">
-            <img src="${escapeHtml(safeImageUrl(item.image))}" alt="${escapeHtml(item.name)}" />
+            <img src="${escapeHtml(safeImageUrl(item.image))}" alt="${escapeHtml(item.name)}" loading="lazy" decoding="async" />
             <span>${escapeHtml(item.badge)}</span>
           </div>
           <div class="dish-body">
@@ -1525,6 +1512,8 @@ function renderCart() {
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
   navCartCount.textContent = String(itemCount)
   headerCartTotal.textContent = formatPrice(total())
+  document.querySelector<HTMLElement>('#mobile-cart-count')!.textContent = String(itemCount)
+  document.querySelector<HTMLElement>('#mobile-cart-total')!.textContent = formatPrice(total())
   headerCartNote.textContent = itemCount ? `${itemCount} item${itemCount === 1 ? '' : 's'} ready for checkout` : 'No items yet'
   cartStatus.textContent = itemCount === 1 ? '1 item' : `${itemCount} items`
   clearCartButton.disabled = itemCount === 0
@@ -1545,9 +1534,9 @@ function renderCart() {
           </div>
           <div class="cart-product-side">
             <div class="quantity-controls" aria-label="Quantity controls for ${escapeHtml(item.name)}">
-              <button type="button" data-dec="${item.id}">-</button>
+              <button type="button" data-dec="${item.id}" aria-label="Decrease ${escapeHtml(item.name)} quantity">−</button>
               <span>${item.quantity}</span>
-              <button type="button" data-inc="${item.id}">+</button>
+              <button type="button" data-inc="${item.id}" aria-label="Increase ${escapeHtml(item.name)} quantity">+</button>
             </div>
             <strong class="line-price">${formatPrice(item.price * item.quantity)}</strong>
           </div>
@@ -1564,9 +1553,11 @@ function renderCart() {
   updatePaymentDetail()
 }
 
+let productTrigger: HTMLElement | null = null
 function showProduct(id: number) {
   const item = menuItems.find((dish) => dish.id === id)
   if (!item) return
+  productTrigger = document.activeElement instanceof HTMLElement ? document.activeElement : null
   productModalContent.innerHTML = `
     <div class="product-modal-photo">
       <img src="${escapeHtml(safeImageUrl(item.image))}" alt="${escapeHtml(item.name)}" />
@@ -1602,12 +1593,14 @@ function showProduct(id: number) {
   productModal.classList.add('visible')
   productModal.setAttribute('aria-hidden', 'false')
   document.body.classList.add('modal-open')
+  productModal.querySelector<HTMLButtonElement>('.product-modal-close')!.focus()
 }
 
 function closeProductModal() {
   productModal.classList.remove('visible')
   productModal.setAttribute('aria-hidden', 'true')
   document.body.classList.remove('modal-open')
+  productTrigger?.focus({ preventScroll: true })
 }
 
 function addToCart(id: number) {
@@ -1691,8 +1684,16 @@ productModal.addEventListener('click', (event) => {
 })
 
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && productModal.classList.contains('visible')) {
+  if (!productModal.classList.contains('visible')) return
+  if (event.key === 'Escape') {
     closeProductModal()
+  }
+  if (event.key === 'Tab') {
+    const controls = [...productModal.querySelectorAll<HTMLElement>('button:not([disabled]), a[href]')]
+    const first = controls[0]
+    const last = controls[controls.length - 1]
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus() }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus() }
   }
 })
 
@@ -1954,12 +1955,25 @@ menuToggle.addEventListener('click', () => {
 
 nav.addEventListener('click', (event) => {
   if ((event.target as HTMLElement).closest('a')) {
-    nav.classList.remove('open')
-    menuToggle.setAttribute('aria-expanded', 'false')
+    closeNavigation()
   }
 })
 
-checkBackendConnection()
+function closeNavigation() {
+  nav.classList.remove('open')
+  menuToggle.setAttribute('aria-expanded', 'false')
+}
+window.addEventListener('hashchange', closeNavigation)
+document.addEventListener('click', (event) => {
+  if (!(event.target as Element).closest('.site-header')) closeNavigation()
+})
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && nav.classList.contains('open')) {
+    closeNavigation()
+    menuToggle.focus()
+  }
+})
+
 loadSiteContent()
 loadStoreSettings()
 loadMenu()

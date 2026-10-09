@@ -1,0 +1,191 @@
+  #app .mobile-order-bar { display: none; }
+
+/* Keep touch layouts together so they override the older page themes. */
+@media (max-width: 1080px) {
+  html { scroll-padding-top: 90px; }
+  #app .site-header {
+    position: sticky !important;
+    top: 0;
+    z-index: 60;
+    padding: 12px 20px !important;
+    gap: 12px;
+  }
+  #app .brand { min-width: 0; flex: 1; }
+  #app .brand span { overflow: hidden; text-overflow: ellipsis; font-size: clamp(16px, 3vw, 22px) !important; }
+  #app .brand img { flex-shrink: 0; }
+  #app .menu-toggle { min-height: 44px !important; min-width: 64px; align-items: center; justify-content: center; }
+  #app .site-nav.open {
+    align-items: stretch !important;
+    max-height: calc(100dvh - 100px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    flex: 1 0 100%;
+  }
+  #app .site-nav > a { min-height: 44px !important; text-align: left; justify-content: flex-start !important; }
+  #app .site-nav .header-cart-wrap { width: 100%; }
+  #app .site-nav .nav-cart {
+    position: static !important;
+    inset: auto !important;
+    width: 100% !important;
+    min-height: 44px !important;
+    box-shadow: none !important;
+  }
+  #app main > section { scroll-margin-top: 90px; }
+  #app main input:not([type=checkbox]):not([type=radio]), #app main textarea, #app main select {
+    font-size: 16px !important;
+    min-height: 44px !important;
+    min-width: 0;
+    max-width: 100%;
+    color: #302420;
+  }
+  #app main button, #app .product-modal button, #app .category-tab { min-height: 44px !important; touch-action: manipulation; }
+  #app main a, #app main summary { touch-action: manipulation; }
+  #app .category-tabs { overscroll-behavior-x: contain; scrollbar-width: thin; padding-bottom: 10px; }
+  #app .category-tab { flex-shrink: 0; }
+  #app .menu-tools { min-width: 0; }
+  #app .menu-search { flex: 1; min-width: 0; }
+  #app .menu-search input { width: 100%; }
+  #app .veg-toggle { min-height: 44px; cursor: pointer; }
+  #app .veg-toggle input { width: 20px; height: 20px; }
+  #app .form-row > *, #app .checkout-form > *, #app .booking-form > * { min-width: 0; }
+  #app .quantity-controls button { min-width: 44px !important; min-height: 44px !important; }
+  #app .quantity-controls { min-height: 46px; gap: 4px; }
+  #app .remove-line { min-height: 44px !important; padding-inline: 12px !important; }
+  #app .fulfillment-options, #app .payment-options { min-width: 0; padding: 12px !important; gap: 10px !important; }
+  #app .fulfillment-options label, #app .payment-options label {
+    display: grid !important;
+    grid-template-columns: 22px minmax(0, 1fr) !important;
+    column-gap: 10px !important;
+    row-gap: 4px !important;
+    align-items: center;
+    text-align: left !important;
+    min-height: 68px !important;
+    padding: 12px !important;
+    cursor: pointer;
+  }
+  #app .fulfillment-options input, #app .payment-options input { grid-column: 1; grid-row: 1 / 3; width: 20px !important; height: 20px !important; margin: 0 !important; }
+  #app .fulfillment-options label > span, #app .payment-options label > span { grid-column: 2; font-size: 14px !important; }
+  #app .fulfillment-options small, #app .payment-options small { grid-column: 2; margin: 0 !important; color: #65524b !important; font-size: 13px !important; line-height: 1.45; }
+  #app .payment-gateway { background: #fff8ed !important; border: 1px solid #edcfad !important; color: #38271f !important; }
+  #app .payment-gateway-head span { color: #82532d !important; }
+  #app .payment-gateway-head strong { color: #38271f !important; }
+  #app .payment-gateway-head small { color: #6f4b2f !important; background: #ffebce !important; }
+  #app .gateway-panel p { color: #594239 !important; font-size: 14px !important; line-height: 1.6; }
+  #app .verify-payment { color: #ffffff !important; background: #b7322b !important; }
+  #app .faq-section summary { min-height: 48px; padding-block: 14px; }
+  #app .product-modal-card { width: min(640px, calc(100vw - 24px)) !important; max-height: calc(100dvh - 32px) !important; overflow-y: auto; overscroll-behavior: contain; }
+  #app .product-modal-close { min-width: 44px !important; min-height: 44px !important; z-index: 2; }
+  #app .product-modal-actions > * { min-height: 48px !important; }
+}
+
+@media (max-width: 760px) {
+  body { padding-bottom: calc(78px + env(safe-area-inset-bottom, 0px)); }
+  #app .site-header { padding: max(10px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px)) !important; }
+  #app .brand span { font-size: clamp(15px, 4.5vw, 20px) !important; }
+  #app .brand img { width: 40px !important; height: 40px !important; }
+  #app .site-nav { margin-top: 0; }
+  #app .classic-restaurant-hero {
+    grid-template-columns: minmax(0, 1fr) !important;
+    min-height: 0 !important;
+    padding: 28px 16px 32px !important;
+    gap: 24px !important;
+  }
+  #app .hero-copy { width: 100%; min-width: 0; }
+  #app .hero-copy .eyebrow { font-size: 11px !important; margin-bottom: 12px !important; }
+  #app .classic-restaurant-hero h1 { font-size: clamp(36px, 10.5vw, 52px) !important; line-height: 1.06 !important; letter-spacing: -1.5px !important; margin-bottom: 16px !important; }
+  #app .classic-restaurant-hero .hero-text { font-size: 16px !important; line-height: 1.65 !important; margin-bottom: 20px !important; }
+  #app .hero-actions { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; margin: 0 0 16px !important; }
+  #app .hero-actions a { width: 100% !important; min-height: 48px !important; padding: 12px 8px !important; font-size: 14px !important; justify-content: center; }
+  #app .hero-search-card { display: grid !important; grid-template-columns: minmax(0, 1fr) 80px !important; gap: 8px !important; padding: 8px !important; margin: 0 0 16px !important; width: 100% !important; }
+  #app .hero-search-card label { min-width: 0; padding: 8px !important; }
+  #app .hero-search-card input { padding: 4px 0 !important; width: 100%; }
+  #app .hero-search-card > a { min-width: 0 !important; min-height: 48px !important; font-size: 14px !important; padding: 10px !important; }
+  #app .hero-trust-row { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 8px !important; margin: 0 !important; }
+  #app .hero-trust-row > span { min-width: 0 !important; padding: 10px 8px !important; font-size: 11px !important; line-height: 1.4 !important; }
+  #app .hero-trust-row strong { font-size: 20px !important; margin-bottom: 3px; }
+  #app .hero-restaurant-photo { min-height: 0 !important; height: 260px !important; padding: 8px !important; border-radius: 20px !important; }
+  #app .hero-shop-photo { inset: 8px !important; height: calc(100% - 16px) !important; width: calc(100% - 16px) !important; object-fit: cover; border-radius: 14px !important; }
+  #app .hero-image-caption { bottom: 16px !important; left: 16px !important; right: 16px !important; padding: 12px !important; }
+  #app .hero-image-caption strong { font-size: 14px !important; line-height: 1.4; }
+  #app main > section:not(.hero-section):not(.order-section) { padding: 32px 16px !important; }
+  #app .section-heading { gap: 16px !important; margin-bottom: 20px !important; }
+  #app main h2 { font-size: clamp(26px, 7vw, 34px) !important; line-height: 1.15 !important; overflow-wrap: anywhere; }
+  #app .section-heading.wide { align-items: stretch !important; }
+  #app .section-heading .options-main-action, #app .section-heading .offers-view-all { align-self: flex-start; min-height: 44px; }
+  #app .service-band, #app .options-grid, #app .app-feature-grid, #app .feature-cards, #app .review-grid, #app .info-section { grid-template-columns: minmax(0, 1fr) !important; gap: 16px !important; }
+  #app .popular-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 12px !important; }
+  #app .popular-grid a { min-width: 0; min-height: 160px !important; }
+  #app .menu-tools { width: 100%; display: flex !important; flex-wrap: wrap; gap: 12px !important; }
+  #app .menu-search { flex-basis: 100%; }
+  #app .menu-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 20px !important; }
+  #app .dish-card { min-width: 0; }
+  #app .dish-actions { gap: 10px !important; }
+  #app .dish-actions button { min-height: 44px !important; }
+  #app .about-section > img { width: 100%; max-height: 320px; object-fit: cover; }
+  #app .contact-actions { display: flex; flex-wrap: wrap; gap: 10px !important; }
+  #app .contact-actions a { min-height: 44px; display: inline-flex; align-items: center; padding: 10px 12px; }
+  #app .newsletter-form { grid-template-columns: minmax(0, 1fr) !important; width: 100%; }
+  #app .order-section { padding: 28px 16px !important; }
+  #app .cart-page-head { gap: 16px !important; }
+  #app .cart-page-head > a { min-height: 44px; }
+  #app .cart-shell { padding: 14px !important; border-radius: 18px !important; }
+  #app .cart-topline { padding: 14px !important; gap: 12px !important; }
+  #app .cart-intro-card { display: none !important; }
+  #app .cart-mode button { min-height: 46px !important; }
+  #app .cart-item.cart-product { display: grid !important; grid-template-columns: 64px minmax(0, 1fr) !important; gap: 12px !important; align-items: start; padding: 14px !important; }
+  #app .cart-product > img { width: 64px !important; height: 64px !important; object-fit: cover; }
+  #app .cart-product-main { min-width: 0; width: 100%; }
+  #app .cart-line-title strong { overflow-wrap: anywhere; font-size: 16px !important; }
+  #app .cart-line-meta { flex-wrap: wrap; gap: 4px !important; }
+  #app .cart-product-side { grid-column: 1 / -1; width: 100% !important; display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: space-between; gap: 12px; }
+  #app .coupon-panel { display: grid !important; grid-template-columns: minmax(0, 1fr) 80px !important; gap: 8px !important; }
+  #app .coupon-panel label { min-width: 0; }
+  #app .coupon-panel input { width: 100%; }
+  #app .checkout-form { padding: 12px !important; gap: 16px !important; }
+  #app .checkout-form > label, #app .checkout-form .form-row > label { padding: 10px !important; }
+  #app .checkout-form textarea, #app .booking-form textarea { min-height: 100px !important; resize: vertical; }
+  #app .fulfillment-options { grid-template-columns: minmax(0, 1fr) !important; }
+  #app .payment-options { grid-template-columns: minmax(0, 1fr) !important; }
+  #app .booking-panel { padding: 16px !important; min-width: 0; }
+  #app .booking-form { gap: 16px !important; }
+  #app .booking-form .form-row, #app .checkout-form .form-row { grid-template-columns: minmax(0, 1fr) !important; gap: 16px !important; }
+  #app .booking-min-details { flex-wrap: wrap; }
+  #app .mobile-order-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 70;
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 10px;
+    padding: 10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    background: #ffffff; border-top: 1px solid #eadfd8; box-shadow: 0 -4px 24px #2118170d;
+  }
+  #app .mobile-order-bar a { min-height: 48px; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; font-size: 14px; font-weight: 800; touch-action: manipulation; }
+  #app .mobile-menu-link { color: #372927; border: 1px solid #eadfd8; }
+  #app .mobile-cart-link { background: #d93649; color: #ffffff; padding: 10px; justify-content: space-between !important; }
+  #app #mobile-cart-count { display: inline-block; min-width: 22px; padding: 2px 6px; border-radius: 6px; background: #ffffff; color: #b52134; text-align: center; margin-left: 4px; }
+  body.cart-page-active #app .mobile-order-bar, body.modal-open #app .mobile-order-bar { display: none; }
+  .cart-page-active { padding-bottom: env(safe-area-inset-bottom, 0px); }
+  #app .toast { bottom: calc(88px + env(safe-area-inset-bottom, 0px)) !important; left: 16px !important; right: 16px !important; width: auto !important; max-width: none !important; transform: none !important; }
+  body.cart-page-active #app .toast { bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important; }
+  #app footer { padding: 28px 16px !important; gap: 20px !important; }
+  #app footer strong { font-size: clamp(18px, 6vw, 25px) !important; overflow-wrap: anywhere; }
+  #app footer nav { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+  #app footer a { min-height: 44px; display: inline-flex; align-items: center; }
+  #app .product-modal { padding: 12px !important; }
+  #app .product-modal-photo { max-height: 240px !important; min-height: 0 !important; }
+  #app .product-modal-body { padding: 20px !important; }
+  #app .product-modal-title-row { flex-wrap: wrap; gap: 12px !important; }
+  #app .product-modal-title-row > div { min-width: 0; }
+  #app .product-modal-actions { grid-template-columns: minmax(0, 1fr) !important; gap: 10px !important; }
+}
+
+@media (max-width: 360px) {
+  #app .site-header { padding-inline: 12px !important; gap: 8px; }
+  #app .brand { gap: 8px !important; }
+  #app .brand span { font-size: 15px !important; }
+  #app .hero-actions { grid-template-columns: minmax(0, 1fr) !important; }
+  #app .hero-search-card { grid-template-columns: minmax(0, 1fr) 68px !important; }
+  #app .hero-trust-row > span { font-size: 10px !important; padding-inline: 6px !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
