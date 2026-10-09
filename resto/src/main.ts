@@ -1,6 +1,8 @@
 import './style.css'
+import { apiRequest, escapeHtml, safeImageUrl } from './api'
+import { defaultStoreSettings, type StoreSettings, type Coupon, type Offer } from './store'
 
-type Category = 'Pizza' | 'Burger' | 'Momo' | 'Chowmein' | 'Maggi' | 'Roll' | 'Chicken' | 'Pasta' | 'Biryani' | 'Sides' | 'Drinks'
+type Category = string
 
 type MenuItem = {
   id: number
@@ -40,9 +42,8 @@ type BookingSummary = {
   occasion: string
 }
 
-type ApiError = { error?: string }
-
 type SiteSection = {
+  visible?: boolean
   id: string
   title: string
   subtitle: string
@@ -642,7 +643,9 @@ let menuItems: MenuItem[] = [
   }
 ]
 
-const categories: Array<Category | 'All'> = ['All', 'Pizza', 'Burger', 'Momo', 'Chowmein', 'Maggi', 'Roll', 'Chicken', 'Pasta', 'Biryani', 'Sides', 'Drinks']
+let categories: Array<Category | 'All'> = ['All', 'Pizza', 'Burger', 'Momo', 'Chowmein', 'Maggi', 'Roll', 'Chicken', 'Pasta', 'Biryani', 'Sides', 'Drinks']
+let storeSettings: StoreSettings = { ...defaultStoreSettings }
+let coupons: Coupon[] = [{ code: 'AMIT10', percent: 10, minOrder: 0, active: true }]
 let activeCategory: Category | 'All' = 'All'
 let searchTerm = ''
 let vegOnly = false
@@ -658,9 +661,9 @@ const readJson = <T>(key: string, fallback: T): T => {
 
 const sanitizeCart = (savedCart: Cart) =>
   Object.fromEntries(
-    Object.entries(savedCart)
-      .map(([id, quantity]) => [Number(id), Math.max(0, Number(quantity))])
-      .filter(([id, quantity]) => menuItems.some((item) => item.id === id) && quantity > 0),
+    Object.entries(savedCart && typeof savedCart === 'object' ? savedCart : {})
+      .map(([id, quantity]) => [Number(id), Math.min(100, Math.floor(Number(quantity)))])
+      .filter(([id, quantity]) => menuItems.some((item) => item.id === id) && Number.isFinite(quantity) && quantity > 0),
   ) as Cart
 
 let cart: Cart = sanitizeCart(readJson<Cart>('resto-cart', {}))
@@ -674,23 +677,16 @@ const saveCart = () => localStorage.setItem('resto-cart', JSON.stringify(cart))
 const saveOrder = () => localStorage.setItem('resto-last-order', JSON.stringify(lastOrder))
 const saveBooking = () => localStorage.setItem('resto-last-booking', JSON.stringify(lastBooking))
 
-async function apiRequest<T>(path: string, options: RequestInit = {}) {
-  const response = await fetch(path, {
-    headers: { 'content-type': 'application/json', ...(options.headers || {}) },
-    ...options,
-  })
-  const data = (await response.json().catch(() => ({}))) as ApiError
-  if (!response.ok) throw new Error(data.error || 'Request failed')
-  return data as T
-}
-
 
 const formatPrice = (price: number) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(price)
 const cartItems = () => menuItems.filter((item) => cart[item.id]).map((item) => ({ ...item, quantity: cart[item.id] }))
 const subtotal = () => cartItems().reduce((sum, item) => sum + item.price * item.quantity, 0)
-const deliveryFee = () => (subtotal() > 0 ? 49 : 0)
-const discount = () => (activeCoupon === 'AMIT10' ? subtotal() * 0.1 : 0)
-const tax = () => Math.max(0, subtotal() - discount()) * 0.05
+const deliveryFee = () => (subtotal() > 0 && selectedOrderType() === 'Delivery' ? storeSettings.deliveryFee : 0)
+const discount = () => {
+  const coupon = coupons.find((entry) => entry.code === activeCoupon && entry.active && subtotal() >= entry.minOrder)
+  return coupon ? subtotal() * coupon.percent / 100 : 0
+}
+const tax = () => Math.max(0, subtotal() - discount()) * storeSettings.taxRate / 100
 const total = () => Math.max(0, subtotal() - discount()) + deliveryFee() + tax()
 
 const app = document.querySelector<HTMLDivElement>('#app')!
@@ -959,22 +955,16 @@ app.innerHTML = `
               <p>Confirm cash payment for delivery or pickup. Order will be accepted after this confirmation.</p>
             </div>
             <div class="gateway-panel" data-gateway-panel="Razorpay">
-              <p>Use Razorpay Checkout for online payment. It supports UPI, cards, wallets, and netbanking. If merchant keys are not configured, this website runs a safe local demo payment.</p>
-              <small>Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET on the backend for live payments.</small>
+              <p>Pay securely using UPI, cards, wallets, or netbanking through Razorpay Checkout.</p>
             </div>
             <div class="gateway-panel" data-gateway-panel="UPI">
-              <label><span>UPI ID</span><input name="upiId" placeholder="name@upi" /></label>
-              <small>Example: amitfoodhub@upi</small>
+              <p>Pay by UPI at delivery or pickup. The restaurant will confirm receipt.</p>
             </div>
             <div class="gateway-panel" data-gateway-panel="Card">
-              <div class="form-row">
-                <label><span>Card number</span><input name="cardNumber" inputmode="numeric" maxlength="19" placeholder="1234 1234 1234 1234" /></label>
-                <label><span>Expiry</span><input name="cardExpiry" placeholder="MM/YY" /></label>
-              </div>
+              <p>Pay by card at the shop counter when you collect your order.</p>
             </div>
             <div class="gateway-panel" data-gateway-panel="Bank transfer">
-              <label><span>Bank reference</span><input name="bankReference" placeholder="UTR / transaction reference" /></label>
-              <small>Use after transferring to the shop bank account.</small>
+              <p>Contact the restaurant for bank details. Your payment remains pending until receipt is confirmed.</p>
             </div>
             <button class="verify-payment" id="verify-payment" type="button">Verify payment</button>
           </div>
@@ -1072,6 +1062,7 @@ app.innerHTML = `
         <p class="eyebrow">Visit us</p>
         <h2 id="contact-title">Amit's Food Hub</h2>
         <p>Open daily from 11:00 AM to 11:00 PM for orders, pickup, and fast food cravings.</p>
+        <p id="restaurant-contact-details"></p>
         <div class="contact-actions">
           <a href="tel:8420431593">Call now</a>
           <a href="https://wa.me/918420431593" target="_blank" rel="noreferrer">WhatsApp order</a>
@@ -1252,10 +1243,14 @@ async function startRazorpayPayment() {
   try {
     const response = await apiRequest<{ order: RazorpayGatewayOrder }>('/api/payments/razorpay/order', {
       method: 'POST',
-      body: JSON.stringify({ amount: Math.round(total()), name, phone }),
+      body: JSON.stringify({ type: selectedOrderType(), cartItems: cartItems().map(({ id, quantity }) => ({ id, quantity })), coupon: activeCoupon, name, phone }),
     })
     if (response.order.demo) {
-      paymentTransactionId = `DEMO-${response.order.id}`
+      const verification = await apiRequest<{ transactionId: string }>('/api/payments/razorpay/verify', {
+        method: 'POST',
+        body: JSON.stringify({ razorpayOrderId: response.order.id, razorpayPaymentId: `DEMO-${response.order.id}` }),
+      })
+      paymentTransactionId = verification.transactionId
       paymentGatewayReady = true
       gatewayStatus.textContent = 'Demo paid'
       gatewayStatus.classList.add('paid')
@@ -1274,7 +1269,7 @@ async function startRazorpayPayment() {
     showToast(error instanceof Error ? error.message : 'Payment failed. Try again.')
   } finally {
     verifyPaymentButton.disabled = false
-    verifyPaymentButton.textContent = selectedPaymentMethod() === 'Cash' ? 'Confirm payment' : selectedPaymentMethod() === 'Razorpay' ? 'Pay with Razorpay' : 'Verify payment'
+    verifyPaymentButton.textContent = selectedPaymentMethod() === 'Cash' ? 'Confirm payment' : selectedPaymentMethod() === 'Razorpay' ? 'Pay with Razorpay' : 'Confirm pay later'
   }
 }
 
@@ -1284,23 +1279,24 @@ function updatePaymentDetail() {
   const details: Record<string, string> = {
     Cash: `Confirm cash payment for ${orderType.toLowerCase()} before placing the order.`,
     Razorpay: `Pay securely online with Razorpay for ${formatPrice(total())}.`,
-    UPI: `Enter UPI ID and verify ${formatPrice(total())} before placing the order.`,
-    Card: `Enter card details and verify ${formatPrice(total())} before placing the order.`,
-    'Bank transfer': `Enter bank transfer reference for ${formatPrice(total())} before placing the order.`,
+    UPI: `Pay ${formatPrice(total())} by UPI on delivery or pickup.`,
+    Card: `Pay ${formatPrice(total())} by card at the shop counter.`,
+    'Bank transfer': `Arrange a bank transfer of ${formatPrice(total())} with the restaurant.`,
   }
   paymentDetail.textContent = details[payment] || details.Cash
   gatewayTotal.textContent = formatPrice(total())
   paymentGateway.querySelectorAll<HTMLElement>('.gateway-panel').forEach((panel) => {
     panel.classList.toggle('active', panel.dataset.gatewayPanel === payment)
   })
-  verifyPaymentButton.textContent = payment === 'Cash' ? 'Confirm payment' : payment === 'Razorpay' ? 'Pay with Razorpay' : 'Verify payment'
+  verifyPaymentButton.textContent = payment === 'Cash' ? 'Confirm payment' : payment === 'Razorpay' ? 'Pay with Razorpay' : 'Confirm pay later'
 }
 
 function updateCheckoutAvailability() {
   const hasItems = cartItems().length > 0
   checkoutTab.disabled = !hasItems
   proceedCheckoutButton.disabled = !hasItems
-  placeOrderButton.disabled = !hasItems || !paymentGatewayReady
+  placeOrderButton.disabled = !hasItems || !paymentGatewayReady || !storeSettings.acceptingOrders
+  if (!storeSettings.acceptingOrders) placeOrderButton.textContent = 'Online orders paused'
   if (!hasItems) setCartView('cart')
 }
 
@@ -1330,7 +1326,7 @@ function setButtonLoading(button: HTMLButtonElement | null, loading: boolean, te
 
 function setText(selector: string, value?: string) {
   const element = document.querySelector<HTMLElement>(selector)
-  if (element && value) element.textContent = value
+  if (element && value !== undefined) element.textContent = value
 }
 
 function setLink(selector: string, text?: string, href?: string) {
@@ -1341,6 +1337,39 @@ function setLink(selector: string, text?: string, href?: string) {
 }
 
 function applySiteSections(sections: SiteSection[]) {
+  const selectors: Record<string, string> = { home: '.hero-section', popular: '.popular-section', features: '.app-features-section', options: '.restaurant-options', offers: '#offers', menu: '#menu', about: '#about', reviews: '.reviews-section', booking: '#booking', contact: '#contact', cart: '#cart' }
+  for (const section of sections) {
+    const element = document.querySelector<HTMLElement>(selectors[section.id] || '[data-unknown-section]')
+    if (element) {
+      if (section.visible === false) element.style.setProperty('display', 'none', 'important')
+      else element.style.removeProperty('display')
+      if (['popular', 'features', 'options', 'offers', 'menu', 'reviews'].includes(section.id)) {
+        const heading = element.querySelector<HTMLElement>('.section-heading h2')
+        let description = element.querySelector<HTMLElement>('[data-section-description]')
+        if (!description && heading) {
+          description = document.createElement('p')
+          description.dataset.sectionDescription = ''
+          heading.insertAdjacentElement('afterend', description)
+        }
+        if (description) description.textContent = section.subtitle
+      }
+      const buttonSelectors: Record<string,string> = { home: '.primary-action', popular: '.options-main-action', options: '.options-main-action', offers: '.offers-view-all', cart: '.cart-page-head a' }
+      let button = element.querySelector<HTMLAnchorElement>(buttonSelectors[section.id] || '[data-section-action]')
+      const buttonContainer = element.querySelector('.section-heading') || element.querySelector('h2')?.parentElement
+      if (!button && section.buttonText && buttonContainer) {
+        button = document.createElement('a')
+        button.dataset.sectionAction = ''
+        button.className = 'options-main-action'
+        buttonContainer.append(button)
+      }
+      if (button) {
+        button.textContent = section.buttonText || ''
+        button.href = section.buttonHref || '#menu'
+        if (!section.buttonText) button.style.setProperty('display','none','important')
+        else button.style.removeProperty('display')
+      }
+    }
+  }
   const byId = Object.fromEntries(sections.map((section) => [section.id, section])) as Record<string, SiteSection>
   setText('#hero-title', byId.home?.title)
   setText('.classic-restaurant-hero .hero-text', byId.home?.subtitle)
@@ -1375,8 +1404,11 @@ async function loadSiteContent() {
 async function loadMenu() {
   try {
     const data = await apiRequest<{ menu: MenuItem[] }>('/api/menu')
-    if (Array.isArray(data.menu) && data.menu.length) {
+    if (Array.isArray(data.menu)) {
       menuItems = data.menu
+      categories = ['All', ...new Set(data.menu.map((item) => item.category))]
+      document.querySelector<HTMLElement>('.category-tabs')!.innerHTML = categories.map((category) => `<button type="button" class="category-tab ${category === activeCategory ? 'active' : ''}" data-category="${escapeHtml(category)}">${escapeHtml(category)}</button>`).join('')
+      if (!categories.includes(activeCategory)) activeCategory = 'All'
       cart = sanitizeCart(cart)
       saveCart()
     }
@@ -1385,6 +1417,32 @@ async function loadMenu() {
   }
   renderMenu()
   renderCart()
+}
+
+async function loadStoreSettings() {
+  try {
+    const data = await apiRequest<{ settings: StoreSettings; coupons: Coupon[]; offers: Offer[] }>('/api/store-settings')
+    storeSettings = data.settings
+    coupons = data.coupons
+    document.querySelectorAll<HTMLElement>('.brand > span').forEach((element) => { element.textContent = storeSettings.restaurantName })
+    document.querySelectorAll<HTMLImageElement>('.brand > img').forEach((element) => { element.src = safeImageUrl(storeSettings.logoImage) })
+    document.querySelector<HTMLImageElement>('.hero-shop-photo')!.src = safeImageUrl(storeSettings.heroImage)
+    document.querySelectorAll<HTMLAnchorElement>('a[href^="tel:"]').forEach((element) => { element.href = 'tel:' + storeSettings.phone.replace(/[^+\d]/g, '') })
+    document.querySelectorAll<HTMLAnchorElement>('a[href^="https://wa.me/"]').forEach((element) => { element.href = 'https://wa.me/' + storeSettings.whatsapp.replace(/\D/g, '') })
+    document.querySelector<HTMLElement>('#restaurant-contact-details')!.textContent = [storeSettings.openingHours, storeSettings.address].filter(Boolean).join(' · ')
+    document.querySelector<HTMLElement>('.hero-copy .eyebrow')!.textContent = storeSettings.restaurantName
+    document.querySelector<HTMLElement>('footer strong')!.innerHTML = `<img src="${escapeHtml(safeImageUrl(storeSettings.logoImage))}" alt=""/> ${escapeHtml(storeSettings.restaurantName)}`
+    document.title = `${storeSettings.restaurantName} | Restaurant`
+    const offersGrid = document.querySelector<HTMLElement>('#offers .feature-cards')
+    if (offersGrid) offersGrid.innerHTML = data.offers.length ? data.offers.map((offer) => `<article class="deal-card"><span class="deal-kicker">Restaurant offer</span><strong>${escapeHtml(offer.title)}</strong><p>${escapeHtml(offer.description)}</p><a href="${escapeHtml(offer.link || '#menu')}">View offer</a></article>`).join('') : '<p>No offers available right now.</p>'
+    const bookingButton = document.querySelector<HTMLButtonElement>('#booking-form button[type="submit"], #booking-form button')!
+    bookingButton.disabled = !storeSettings.acceptingReservations
+    if (!storeSettings.acceptingReservations) bookingButton.textContent = 'Reservations paused'
+    resetPaymentGateway()
+    renderCart()
+  } catch {
+    // Preserve built-in details when the backend is unavailable.
+  }
 }
 
 function filteredItems() {
@@ -1402,17 +1460,17 @@ function renderMenu() {
     ? items.map((item) => `
         <article class="dish-card">
           <div class="dish-photo">
-            <img src="${item.image}" alt="${item.name}" />
-            <span>${item.badge}</span>
+            <img src="${escapeHtml(safeImageUrl(item.image))}" alt="${escapeHtml(item.name)}" />
+            <span>${escapeHtml(item.badge)}</span>
           </div>
           <div class="dish-body">
             <div class="dish-title">
-              <h3>${item.name}</h3>
+              <h3>${escapeHtml(item.name)}</h3>
               <strong>${formatPrice(item.price)}</strong>
             </div>
-            <p>${item.description}</p>
+            <p>${escapeHtml(item.description)}</p>
             <div class="dish-meta">
-              <span>${item.category}</span>
+              <span>${escapeHtml(item.category)}</span>
               <span>${item.vegetarian ? 'Vegetarian' : 'Signature'}</span>
               <span>${item.rating.toFixed(1)} rating</span>
             </div>
@@ -1431,16 +1489,16 @@ function renderOrderSummary() {
     ? `
         <div class="latest-order-head">
           <span>Latest order</span>
-          <strong>Order #${lastOrder.id}</strong>
+          <strong>Order #${escapeHtml(lastOrder.id)}</strong>
         </div>
-        <p>${lastOrder.type} for ${lastOrder.name}</p>
-        <small>${lastOrder.items}</small>
+        <p>${escapeHtml(lastOrder.type)} for ${escapeHtml(lastOrder.name)}</p>
+        <small>${escapeHtml(lastOrder.items)}</small>
         <div class="latest-order-foot">
           <b>${formatPrice(lastOrder.total)}</b>
-          <em>Payment: ${lastOrder.paymentMethod || 'Not selected'} · ${lastOrder.paymentStatus || 'Confirmed'} · Phone: ${lastOrder.phone}</em>
+          <em>Payment: ${escapeHtml(lastOrder.paymentMethod || 'Not selected')} · ${escapeHtml(lastOrder.paymentStatus || 'Confirmed')} · Phone: ${escapeHtml(lastOrder.phone)}</em>
         </div>
-        <small>Note: ${lastOrder.address}</small>
-        ${lastOrder.transactionId ? `<small>Transaction: ${lastOrder.transactionId}</small>` : ''}
+        <small>Note: ${escapeHtml(lastOrder.address)}</small>
+        ${lastOrder.transactionId ? `<small>Transaction: ${escapeHtml(lastOrder.transactionId)}</small>` : ''}
       `
     : '<p>No confirmed order yet.</p>'
 }
@@ -1449,9 +1507,9 @@ function renderBookingSummary() {
   bookingSummary.innerHTML = lastBooking
     ? `
         <span>Latest reservation</span>
-        <strong>Booking #${lastBooking.id}</strong>
-        <p>Table for ${lastBooking.guests} on ${lastBooking.date} at ${lastBooking.time}</p>
-        <small>${lastBooking.name} · ${lastBooking.guests} guests · ${lastBooking.occasion}</small>
+        <strong>Booking #${escapeHtml(lastBooking.id)}</strong>
+        <p>Table for ${escapeHtml(lastBooking.guests)} on ${escapeHtml(lastBooking.date)} at ${escapeHtml(lastBooking.time)}</p>
+        <small>${escapeHtml(lastBooking.name)} · ${escapeHtml(lastBooking.guests)} guests · ${escapeHtml(lastBooking.occasion)}</small>
       `
     : '<p>No reservation submitted yet.</p>'
 }
@@ -1474,11 +1532,11 @@ function renderCart() {
   cartList.innerHTML = items.length
     ? items.map((item) => `
         <div class="cart-item cart-product">
-          <img src="${item.image}" alt="${item.name}" />
+          <img src="${escapeHtml(safeImageUrl(item.image))}" alt="${escapeHtml(item.name)}" />
           <div class="cart-product-main">
             <div class="cart-line-title">
-              <strong>${item.name}</strong>
-              <span>${item.category}</span>
+              <strong>${escapeHtml(item.name)}</strong>
+              <span>${escapeHtml(item.category)}</span>
             </div>
             <div class="cart-line-meta">
               <span>${formatPrice(item.price)} each</span>
@@ -1486,7 +1544,7 @@ function renderCart() {
             </div>
           </div>
           <div class="cart-product-side">
-            <div class="quantity-controls" aria-label="Quantity controls for ${item.name}">
+            <div class="quantity-controls" aria-label="Quantity controls for ${escapeHtml(item.name)}">
               <button type="button" data-dec="${item.id}">-</button>
               <span>${item.quantity}</span>
               <button type="button" data-inc="${item.id}">+</button>
@@ -1511,18 +1569,18 @@ function showProduct(id: number) {
   if (!item) return
   productModalContent.innerHTML = `
     <div class="product-modal-photo">
-      <img src="${item.image}" alt="${item.name}" />
-      <span>${item.badge}</span>
+      <img src="${escapeHtml(safeImageUrl(item.image))}" alt="${escapeHtml(item.name)}" />
+      <span>${escapeHtml(item.badge)}</span>
     </div>
     <div class="product-modal-body">
       <div class="product-modal-kicker">
-        <span>${item.category}</span>
+        <span>${escapeHtml(item.category)}</span>
         <span>${item.vegetarian ? 'Veg' : 'Non veg'}</span>
       </div>
       <div class="product-modal-title-row">
         <div>
-          <h3 id="product-modal-title">${item.name}</h3>
-          <p>${item.description}</p>
+          <h3 id="product-modal-title">${escapeHtml(item.name)}</h3>
+          <p>${escapeHtml(item.description)}</p>
         </div>
         <strong>${formatPrice(item.price)}</strong>
       </div>
@@ -1553,6 +1611,10 @@ function closeProductModal() {
 }
 
 function addToCart(id: number) {
+  if ((cart[id] ?? 0) >= 100) {
+    showToast('You can order up to 100 of each dish.')
+    return
+  }
   cart = { ...cart, [id]: (cart[id] ?? 0) + 1 }
   resetPaymentGateway()
   saveCart()
@@ -1562,6 +1624,10 @@ function addToCart(id: number) {
 }
 
 function updateQuantity(id: number, nextQuantity: number) {
+  if (nextQuantity > 100) {
+    showToast('You can order up to 100 of each dish.')
+    return
+  }
   if (nextQuantity <= 0) {
     const { [id]: _removed, ...nextCart } = cart
     cart = nextCart
@@ -1650,8 +1716,7 @@ checkoutForm.addEventListener('change', (event) => {
   const target = event.target as HTMLElement
   if (target.closest('input[name="paymentMethod"], input[name="orderType"]')) {
     resetPaymentGateway()
-    updateCheckoutAvailability()
-    updatePaymentDetail()
+    renderCart()
   }
 })
 
@@ -1666,34 +1731,12 @@ verifyPaymentButton.addEventListener('click', async () => {
     return
   }
 
-  const upi = checkoutForm.elements.namedItem('upiId') as HTMLInputElement
-  const cardNumber = checkoutForm.elements.namedItem('cardNumber') as HTMLInputElement
-  const cardExpiry = checkoutForm.elements.namedItem('cardExpiry') as HTMLInputElement
-  const bankReference = checkoutForm.elements.namedItem('bankReference') as HTMLInputElement
-
-  if (payment === 'UPI' && !/^[\w.-]+@[\w.-]+$/.test(upi.value.trim())) {
-    setFieldError(upi, 'Enter a valid UPI ID.')
-    return
-  }
-  if (payment === 'Card' && cardNumber.value.replace(/\s/g, '').length < 12) {
-    setFieldError(cardNumber, 'Enter a valid card number.')
-    return
-  }
-  if (payment === 'Card' && !/^\d{2}\/\d{2}$/.test(cardExpiry.value.trim())) {
-    setFieldError(cardExpiry, 'Use MM/YY format.')
-    return
-  }
-  if (payment === 'Bank transfer' && bankReference.value.trim().length < 6) {
-    setFieldError(bankReference, 'Enter bank reference number.')
-    return
-  }
-
   paymentGatewayReady = true
-  paymentTransactionId = payment === 'Cash' ? 'Cash confirmed' : `TXN-${Date.now().toString().slice(-6)}`
-  gatewayStatus.textContent = payment === 'Cash' ? 'Confirmed' : 'Verified'
-  gatewayStatus.classList.add('paid')
+  paymentTransactionId = ''
+  gatewayStatus.textContent = 'Pay later'
+  gatewayStatus.classList.remove('paid')
   updateCheckoutAvailability()
-  showToast(`${payment} payment ${payment === 'Cash' ? 'confirmed' : 'verified'}.`)
+  showToast(`${payment} selected. Payment will be confirmed by the restaurant.`)
 })
 
 clearCartButton.addEventListener('click', () => {
@@ -1745,17 +1788,18 @@ applyCouponButton.addEventListener('click', () => {
     showToast('Coupon removed.')
     return
   }
-  if (code !== 'AMIT10') {
+  const coupon = coupons.find((entry) => entry.code === code && entry.active)
+  if (!coupon || subtotal() < coupon.minOrder) {
     activeCoupon = ''
     resetPaymentGateway()
     renderCart()
-    showToast('Invalid coupon. Try AMIT10.')
+    showToast(coupon ? `Add ${formatPrice(coupon.minOrder)} of food to use this coupon.` : 'This coupon is unavailable.')
     return
   }
   activeCoupon = code
   resetPaymentGateway()
   renderCart()
-  showToast('Coupon AMIT10 applied: 10% off.')
+  showToast(`Coupon ${coupon.code} applied: ${coupon.percent}% off.`)
 })
 
 checkoutForm.addEventListener('submit', async (event) => {
@@ -1797,11 +1841,12 @@ checkoutForm.addEventListener('submit', async (event) => {
       name: name.value.trim(),
       phone: phone.value.trim(),
       address: addressText || 'Pickup from Amit\'s Food Hub',
-      items: items.map((item) => `${item.quantity} x ${item.name}`).join(', '),
+      items: items.map((item) => `${item.quantity} x ${escapeHtml(item.name)}`).join(', '),
+      cartItems: items.map(({ id, quantity }) => ({ id, quantity })),
       total: Math.round(total()),
-      coupon: activeCoupon || 'None',
+      coupon: activeCoupon,
       paymentMethod: selectedPaymentMethod(),
-      paymentStatus: paymentGatewayReady ? 'Paid' : 'Pending',
+      paymentStatus: selectedPaymentMethod() === 'Razorpay' ? 'Paid' : 'Pending',
       transactionId: paymentTransactionId,
     }
     const response = await apiRequest<{ order: OrderSummary }>('/api/orders', {
@@ -1810,7 +1855,7 @@ checkoutForm.addEventListener('submit', async (event) => {
     })
     lastOrder = response.order
     saveOrder()
-    showToast(`${lastOrder.type} order confirmed. Payment: ${lastOrder.paymentMethod || selectedPaymentMethod()}. Total: ${formatPrice(lastOrder.total)}`)
+    showToast(`${escapeHtml(lastOrder.type)} order confirmed. Payment: ${lastOrder.paymentMethod || selectedPaymentMethod()}. Total: ${formatPrice(lastOrder.total)}`)
     resetPaymentGateway()
     cart = {}
     activeCoupon = ''
@@ -1867,7 +1912,7 @@ document.querySelector<HTMLFormElement>('#booking-form')!.addEventListener('subm
     lastBooking = response.reservation
     saveBooking()
     renderBookingSummary()
-    showToast(`Table reserved for ${lastBooking.guests} on ${lastBooking.date} at ${lastBooking.time}.`)
+    showToast(`Table reserved for ${escapeHtml(lastBooking.guests)} on ${escapeHtml(lastBooking.date)} at ${escapeHtml(lastBooking.time)}.`)
     form.reset()
   } catch (error) {
     showToast(error instanceof Error ? `Reservation failed: ${error.message}` : 'Reservation failed. Please try again.')
@@ -1915,6 +1960,8 @@ nav.addEventListener('click', (event) => {
 })
 
 checkBackendConnection()
+loadSiteContent()
+loadStoreSettings()
 loadMenu()
 renderOrderSummary()
 renderBookingSummary()

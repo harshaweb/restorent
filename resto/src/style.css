@@ -2959,6 +2959,7 @@ footer a:hover {
   gap: 8px;
   overflow: hidden;
   padding-bottom: 14px;
+  position: relative;
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
@@ -8634,7 +8635,9 @@ body.cart-page-active .order-section-single {
 /* Executive professional homepage hero */
 .executive-home-hero {
   align-items: center;
-  background: linear-gradient(135deg, #fff8f1 0%, #ffffff 58%, #fff2eb 100%) !important;
+  background: #fffaf5 !important;
+  background-blend-mode: normal;
+  color: #201715;
   display: grid !important;
   gap: clamp(28px, 5vw, 76px) !important;
   grid-template-columns: minmax(0, 0.92fr) minmax(360px, 0.82fr) !important;
@@ -8651,6 +8654,9 @@ body.cart-page-active .order-section-single {
 
 .executive-home-hero .hero-copy {
   align-self: center !important;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
   max-width: 690px !important;
   position: relative;
   z-index: 2;
@@ -8763,7 +8769,7 @@ body.cart-page-active .order-section-single {
 }
 
 .executive-home-hero .hero-search-card a {
-  background: #201715 !important;
+  background: #ef4f5f !important;
   border-radius: 8px !important;
   color: #ffffff !important;
   min-height: 52px !important;
@@ -8806,7 +8812,7 @@ body.cart-page-active .order-section-single {
   background: #ffffff !important;
   border: 1px solid rgba(32, 23, 21, 0.1) !important;
   border-radius: 14px !important;
-  box-shadow: 0 28px 70px rgba(32, 23, 21, 0.16) !important;
+  box-shadow: 0 16px 40px rgba(32, 23, 21, 0.08) !important;
   display: block !important;
   inset: auto !important;
   min-height: 0 !important;
@@ -8816,15 +8822,14 @@ body.cart-page-active .order-section-single {
   z-index: 1;
 }
 
+.executive-home-hero .hero-restaurant-photo::before,
 .executive-home-hero .hero-restaurant-photo::after {
-  background: linear-gradient(180deg, rgba(32, 23, 21, 0) 52%, rgba(32, 23, 21, 0.7) 100%) !important;
-  content: '';
-  display: block !important;
-  inset: 0;
-  position: absolute;
+  display: none !important;
 }
 
 .executive-home-hero .hero-shop-photo {
+  border: 0;
+  box-shadow: none;
   filter: none !important;
   height: 100% !important;
   object-fit: cover !important;
@@ -10286,6 +10291,14 @@ main:has(> #cart:target) .cart-page-head {
   background: #fef2f2;
   border-color: #fecaca;
   color: #991b1b;
+}
+
+[data-section-description] {
+  color: #6b5f5b;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 8px 0 0;
+  max-width: 680px;
 }
 
 @media (max-width: 1080px) {

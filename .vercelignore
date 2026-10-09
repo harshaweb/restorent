@@ -1,0 +1,8 @@
+node_modules
+dist
+resto/server
+server.mjs
+scripts
+.env
+.env.*
+tests

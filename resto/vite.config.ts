@@ -1,7 +1,16 @@
-import { defineConfig } from 'vite'
+import { defineConfig, type PreviewServer, type ViteDevServer } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 
+function adminRoute(server: ViteDevServer | PreviewServer) {
+  server.middlewares.use((req, _res, next) => {
+    const url = new URL(req.url || '/', 'http://localhost')
+    if (['/admin', '/admin/', '/admin/index.html'].includes(url.pathname)) req.url = '/admin.html' + url.search
+    next()
+  })
+}
+
 export default defineConfig({
+  plugins: [{ name: 'admin-route', configureServer: adminRoute, configurePreviewServer: adminRoute }],
   build: {
     rollupOptions: {
       input: {
