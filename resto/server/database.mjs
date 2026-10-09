@@ -337,7 +337,7 @@ const defaultSections = [
   ['reviews', 'Reviews section', 'Customers love the taste', 'See why our customers keep coming back for fresh food.', '', ''],
   ['booking', 'Reservation section', 'Book your table', 'Choose visit time and group size, then we will hold a spot for you.', '', ''],
   ['contact', 'Contact section', "Amit's Food Hub", 'Open daily from 11:00 AM to 11:00 PM for orders, pickup, and fast food cravings.', '', ''],
-  ['cart', 'Cart page', 'Cart and checkout', 'Review your food, apply coupon, and place order from a separate cart page.', 'Continue shopping', '#menu'],
+  ['cart', 'Cart page', 'Cart and checkout', 'Your favorites, one step closer. Review your order and choose how to enjoy it.', 'Continue shopping', '#menu'],
 ]
 
 function seedDefaultSections() {
@@ -357,6 +357,7 @@ for (const [id, previous] of [
   ['features', 'Show customer-friendly ordering features and payment options.'],
   ['offers', 'Promote coupons, pickup convenience, and party orders.'],
   ['reviews', 'Highlight customer trust and food quality.'],
+  ['cart', 'Review your food, apply coupon, and place order from a separate cart page.'],
 ]) {
   db.prepare('UPDATE site_sections SET subtitle = ? WHERE section_id = ? AND subtitle = ?')
     .run(defaultSections.find((section) => section[0] === id)[3], id, previous)

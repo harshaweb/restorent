@@ -102,7 +102,8 @@
   #app .hero-search-card > a { min-width: 0 !important; min-height: 48px !important; font-size: 14px !important; padding: 10px !important; }
   #app .hero-trust-row { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 8px !important; margin: 0 !important; }
   #app .hero-trust-row > span { min-width: 0 !important; padding: 10px 8px !important; font-size: 11px !important; line-height: 1.4 !important; }
-  #app .hero-trust-row strong { font-size: 20px !important; margin-bottom: 3px; }
+  #app .hero-trust-row strong { font-size: 13px !important; margin-bottom: 3px; }
+  #app .hero-trust-row > span:first-child strong { font-size: 20px !important; }
   #app .hero-restaurant-photo { min-height: 0 !important; height: 260px !important; padding: 8px !important; border-radius: 20px !important; }
   #app .hero-shop-photo { inset: 8px !important; height: calc(100% - 16px) !important; width: calc(100% - 16px) !important; object-fit: cover; border-radius: 14px !important; }
   #app .hero-image-caption { bottom: 16px !important; left: 16px !important; right: 16px !important; padding: 12px !important; }

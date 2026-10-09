@@ -1,5 +1,8 @@
 import './style.css'
+import './home.css'
 import './mobile.css'
+import './cart.css'
+import './footer.css'
 import { apiRequest, escapeHtml, safeImageUrl } from './api'
 import { defaultStoreSettings, type StoreSettings, type Coupon, type Offer } from './store'
 
@@ -717,7 +720,7 @@ app.innerHTML = `
     <section class="hero-section classic-restaurant-hero executive-home-hero" aria-labelledby="hero-title">
       <div class="hero-copy">
         <p class="eyebrow">Amit's Food Hub</p>
-        <h1 id="hero-title">Fresh food, made fast.</h1>
+        <h1 id="hero-title">Fresh food, <span class="hero-title-accent">made fast.</span></h1>
         <p class="hero-text">Order hot pizza, burgers, momos, rolls, biryani, pasta, chicken, sides, and drinks from one simple local restaurant menu.</p>
         <div class="hero-actions">
           <a class="primary-action" href="#menu">Explore menu</a>
@@ -728,16 +731,17 @@ app.innerHTML = `
           <a href="#menu">Search</a>
         </div>
         <div class="stats hero-trust-row" aria-label="Restaurant highlights">
-          <span><strong>4.9</strong> Customer rating</span>
-          <span><strong>40+</strong> Menu items</span>
-          <span><strong>₹99</strong> Pizza starts</span>
+          <span><strong id="hero-menu-count">40+</strong> Dishes to discover</span>
+          <span><strong>Veg & non veg</strong> Something for everyone</span>
+          <span><strong>Pickup & delivery</strong> Your food, your way</span>
         </div>
       </div>
       <div class="hero-media hero-restaurant-photo">
-        <img class="hero-shop-photo" src="/food-plaza-hero.jpeg" alt="Amit's Food Hub shop front" />
+        <img class="hero-shop-photo" src="/food-plaza-hero.jpeg" alt="Amit's Food Hub shop front" fetchpriority="high" />
+        <div class="hero-visual-stamp" aria-hidden="true">GOOD FOOD<span>Good mood.</span>EVERY DAY</div>
         <div class="hero-image-caption">
-          <span>Open daily</span>
-          <strong>Fast pickup and online ordering</strong>
+          <div><span>Your neighborhood food hub</span><strong>Big on flavor.<br/>Close to home.</strong></div>
+          <a href="#menu" aria-label="Browse our food menu">↗</a>
         </div>
       </div>
     </section>
@@ -756,7 +760,7 @@ app.innerHTML = `
       <article>
         <div class="service-top"><span>02</span><small>Fast service</small></div>
         <h3>Pickup & delivery</h3>
-        <p>Choose pickup or delivery while placing your order, with address and phone details saved to the backend.</p>
+        <p>Enjoy your favorites at home or collect a fresh order from the shop.</p>
         <ul>
           <li>Delivery note</li>
           <li>Pickup option</li>
@@ -784,10 +788,10 @@ app.innerHTML = `
         <a class="options-main-action" href="#menu">Explore menu</a>
       </div>
       <div class="popular-grid">
-        <a href="#menu" data-popular-category="Pizza"><img src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=700&q=80" alt="Pizza" /><strong>Pizza</strong><span>From ₹99</span></a>
-        <a href="#menu" data-popular-category="Burger"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80" alt="Burger" /><strong>Burger</strong><span>From ₹69</span></a>
-        <a href="#menu" data-popular-category="Momo"><img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?auto=format&fit=crop&w=700&q=80" alt="Momo" /><strong>Momo</strong><span>From ₹60</span></a>
-        <a href="#menu" data-popular-category="Biryani"><img src="https://images.unsplash.com/photo-1701579231305-d84d8af9a3fd?auto=format&fit=crop&w=700&q=80" alt="Biryani" /><strong>Biryani</strong><span>From ₹140</span></a>
+        <a href="#menu" data-popular-category="Pizza"><img src="https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=700&q=80" alt="Pizza" loading="lazy" /><div><strong>Pizza</strong><span>From ₹99</span></div><b aria-hidden="true">↗</b></a>
+        <a href="#menu" data-popular-category="Burger"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80" alt="Burger" loading="lazy" /><div><strong>Burger</strong><span>From ₹69</span></div><b aria-hidden="true">↗</b></a>
+        <a href="#menu" data-popular-category="Momo"><img src="https://images.unsplash.com/photo-1625220194771-7ebdea0b70b9?auto=format&fit=crop&w=700&q=80" alt="Momo" loading="lazy" /><div><strong>Momo</strong><span>From ₹60</span></div><b aria-hidden="true">↗</b></a>
+        <a href="#menu" data-popular-category="Biryani"><img src="https://images.unsplash.com/photo-1701579231305-d84d8af9a3fd?auto=format&fit=crop&w=700&q=80" alt="Biryani" loading="lazy" /><div><strong>Biryani</strong><span>From ₹140</span></div><b aria-hidden="true">↗</b></a>
       </div>
     </section>
 
@@ -880,44 +884,32 @@ app.innerHTML = `
     </section>
 
     <section class="order-section order-section-single" id="cart" aria-labelledby="cart-page-title">
-      <div class="cart-page-head"><div><p class="eyebrow">Your cart</p><h2 id="cart-page-title">Cart and checkout</h2><span>Review your food, apply coupon, and place order from a separate cart page.</span></div><a href="#menu">Continue shopping</a></div>
-      <aside class="cart-panel cart-shell" aria-live="polite">
+      <div class="cart-page-head"><div><p class="eyebrow">Your cart</p><h2 id="cart-page-title">Cart and checkout</h2><span>Your favorites, one step closer. Review your order and choose how to enjoy it.</span></div><a href="#menu">Continue shopping</a></div>
+      <div class="cart-panel cart-shell">
+      <div class="cart-toolbar">
         <div class="cart-topline">
           <div class="cart-heading-block">
-            <span>Your cart</span>
-            <strong id="cart-status">0 items</strong>
-            <small>Review dishes before checkout</small>
+            <span>Made for your cravings</span>
+            <strong id="cart-status" aria-live="polite">0 items</strong>
+            <small>A little closer to your next good meal.</small>
           </div>
           <a class="cart-add-more" href="#menu">Add more</a>
         </div>
         <div class="cart-mode" role="tablist" aria-label="Cart and checkout options">
-          <button class="active" id="cart-tab" type="button" role="tab" aria-selected="true" aria-controls="cart-view" data-cart-view="cart">Cart</button>
-          <button id="checkout-tab" type="button" role="tab" aria-selected="false" aria-controls="checkout-view" data-cart-view="checkout">Checkout</button>
+          <button class="active" id="cart-tab" type="button" role="tab" aria-selected="true" aria-controls="cart-view" data-cart-view="cart"><span aria-hidden="true">01</span> Your cart</button>
+          <button id="checkout-tab" type="button" role="tab" aria-selected="false" aria-controls="checkout-view" data-cart-view="checkout"><span aria-hidden="true">02</span> Checkout</button>
         </div>
-        <div class="cart-intro-card">
-          <span>Your order</span>
-          <h3>Cart and checkout</h3>
-          <p>Review items, apply coupon, choose payment, and confirm your order from one premium checkout desk.</p>
-        </div>
-        <div class="cart-view active" id="cart-view">
+      </div>
+      <div class="cart-workspace">
+      <div class="cart-main">
+        <div class="cart-view active" id="cart-view" role="tabpanel" aria-labelledby="cart-tab">
+          <div class="cart-selection-head"><div><p class="eyebrow">The good stuff</p><h3>Your selection</h3></div><button class="clear-cart" id="clear-cart" type="button">Clear cart</button></div>
           <div id="cart-list" class="cart-list"></div>
-        <button class="clear-cart" id="clear-cart" type="button">Clear cart</button>
-        <div class="coupon-panel">
-          <label><span>Coupon</span><input id="coupon-code" placeholder="AMIT10" /></label>
-          <button id="apply-coupon" type="button">Apply</button>
+          <p class="cart-selection-note">Choose pickup or delivery at checkout. Pickup has no delivery fee.</p>
         </div>
-        <div class="coupon-status" id="coupon-status">No coupon applied</div>
-        <div class="totals cart-totals">
-          <div><span>Subtotal</span><strong id="subtotal">₹0</strong></div>
-          <div><span>Discount</span><strong id="discount">₹0</strong></div>
-          <div><span>Delivery</span><strong id="delivery">₹0</strong></div>
-          <div><span>Tax</span><strong id="tax">₹0</strong></div>
-          <div class="grand-total"><span>Total</span><strong id="total">₹0</strong></div>
-        </div>
-        <button class="proceed-checkout" id="proceed-checkout" type="button">Proceed to checkout</button>
-        </div>
-        <div class="cart-view" id="checkout-view">
+        <div class="cart-view" id="checkout-view" role="tabpanel" aria-labelledby="checkout-tab">
         <form class="checkout-form" id="checkout-form">
+          <div class="checkout-section-head"><p class="eyebrow">Almost there</p><h3>Your details</h3><p>Tell us who we are cooking for.</p></div>
           <div class="form-row">
             <label><span>Name</span><input name="name" autocomplete="name" required placeholder="Your name" /></label>
             <label><span>Phone</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="Mobile number" /></label>
@@ -940,7 +932,7 @@ app.innerHTML = `
           <div class="payment-gateway" id="payment-gateway">
             <div class="payment-gateway-head">
               <div>
-                <span>Secure payment gateway</span>
+                <span id="payment-step-label">Payment confirmation</span>
                 <strong id="gateway-total">₹0</strong>
               </div>
               <small id="gateway-status">Pending</small>
@@ -966,7 +958,28 @@ app.innerHTML = `
         </form>
         </div>
         <div class="confirmation-card" id="order-summary"></div>
+      </div>
+      <aside class="cart-summary" aria-labelledby="cart-summary-title">
+        <div class="cart-summary-heading"><p class="eyebrow">A little happiness, itemized</p><h3 id="cart-summary-title">Order summary</h3></div>
+        <div class="cart-summary-items" id="cart-summary-items"></div>
+        <div class="coupon-panel">
+          <label><span>Have a coupon?</span><input id="coupon-code" placeholder="Enter code" autocomplete="off" /></label>
+          <button id="apply-coupon" type="button">Apply</button>
+        </div>
+        <div class="coupon-status" id="coupon-status" aria-live="polite">No coupon applied</div>
+        <div class="totals cart-totals">
+          <div><span>Subtotal</span><strong id="subtotal">₹0</strong></div>
+          <div><span>Discount</span><strong id="discount">₹0</strong></div>
+          <div><span>Delivery</span><strong id="delivery">₹0</strong></div>
+          <div><span>Tax</span><strong id="tax">₹0</strong></div>
+          <div class="grand-total"><span>Total to pay</span><strong id="total" aria-live="polite">₹0</strong></div>
+        </div>
+        <div class="cart-fulfillment-note" id="cart-fulfillment-note">Delivery fee included. Pickup is free.</div>
+        <button class="proceed-checkout" id="proceed-checkout" type="button">Proceed to checkout</button>
+        <p class="cart-summary-note" id="cart-summary-note">Choose your order type and payment option in the next step.</p>
       </aside>
+      </div>
+      </div>
     </section>
 
     <section class="about-section" id="about" aria-labelledby="about-title">
@@ -1040,17 +1053,6 @@ app.innerHTML = `
       </div>
     </section>
 
-    <section class="faq-section" aria-labelledby="faq-title">
-      <div class="section-heading">
-        <p class="eyebrow">FAQ</p>
-        <h2 id="faq-title">Quick answers</h2>
-      </div>
-      <details open><summary>Can I order online?</summary><p>Yes, add food to cart and place your order from the website.</p></details>
-      <details><summary>Do you have veg and non veg?</summary><p>Yes, use the Veg only toggle or browse all menu categories.</p></details>
-      <details><summary>Can I reserve a table?</summary><p>Yes, use the reservation form and your booking is saved in the backend.</p></details>
-    </section>
-
-
     <section class="contact-section" id="contact" aria-labelledby="contact-title">
       <div>
         <p class="eyebrow">Visit us</p>
@@ -1085,16 +1087,42 @@ app.innerHTML = `
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <footer>
-    <strong><img src="/amit-food-hub-logo.jpeg" alt="" /> Amit's Food Hub</strong>
-    <div>
-      <a href="#menu">Menu</a>
-      <a href="#booking">Reserve</a>
-      <a href="#contact">Contact</a>
-      <a href="#home">Back to top</a>
+  <footer id="site-footer" aria-label="Restaurant information">
+    <div class="footer-invite">
+      <div><p class="footer-eyebrow">Made fresh. Enjoyed together.</p><h2>Your next good meal starts here.</h2></div>
+      <a class="footer-order" href="#menu">Explore the menu <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="footer-main">
+      <div class="footer-story">
+        <a class="footer-brand" href="#home"><strong><img src="/amit-food-hub-logo.jpeg" alt="" /> Amit's Food Hub</strong></a>
+        <p>Fresh favorites for quick bites, family meals, and every craving in between.</p>
+        <div class="footer-services"><span>Delivery</span><span>Pickup</span><span>Dine-in</span></div>
+      </div>
+      <nav class="footer-links" aria-labelledby="footer-explore-title">
+        <h3 id="footer-explore-title">Explore</h3>
+        <a href="#menu">Our menu</a><a href="#offers">Latest offers</a><a href="#booking">Book a table</a><a href="#about">Our story</a>
+      </nav>
+      <div class="footer-contact">
+        <h3>Come hungry, leave happy</h3>
+        <p id="footer-hours">${escapeHtml(storeSettings.openingHours)}</p>
+        <p id="footer-address" hidden></p>
+        <a id="footer-phone" href="tel:8420431593">${escapeHtml(storeSettings.phone)}</a>
+        <a class="footer-whatsapp" href="https://wa.me/918420431593" target="_blank" rel="noreferrer">Chat on WhatsApp <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© ${new Date().getFullYear()} <span id="footer-name">Amit's Food Hub</span>. All rights reserved.</p>
+      <p class="footer-payments"><span>Payment options</span> Cash · UPI · Cards · Bank</p>
+      <a class="footer-back-top" href="#home">Back to top <span aria-hidden="true">↑</span></a>
     </div>
   </footer>
 `
+
+// Put the food and current offers before the detailed service information.
+const offersSection = document.querySelector('#offers')!
+offersSection.insertAdjacentElement('afterend', document.querySelector('#menu')!)
+document.querySelector('#menu')!.insertAdjacentElement('afterend', document.querySelector('.app-features-section')!)
+document.querySelector('.app-features-section')!.insertAdjacentElement('afterend', document.querySelector('.restaurant-options')!)
 
 const menuGrid = document.querySelector<HTMLDivElement>('#menu-grid')!
 const cartList = document.querySelector<HTMLDivElement>('#cart-list')!
@@ -1145,6 +1173,8 @@ function setCartView(view: 'cart' | 'checkout') {
   checkoutTab.setAttribute('aria-selected', String(isCheckout))
   cartView.classList.toggle('active', !isCheckout)
   checkoutView.classList.toggle('active', isCheckout)
+  document.querySelector('.cart-shell')!.classList.toggle('checkout-active', isCheckout)
+  document.querySelector<HTMLElement>('#cart-summary-note')!.textContent = isCheckout ? 'Review your details and confirm your payment choice to place the order.' : 'Choose your order type and payment option in the next step.'
 }
 
 function selectedPaymentMethod() {
@@ -1316,6 +1346,17 @@ function setText(selector: string, value?: string) {
   if (element && value !== undefined) element.textContent = value
 }
 
+function styleHeroTitle() {
+  const heading = document.querySelector<HTMLElement>('#hero-title')!
+  const title = heading.textContent || ''
+  const split = title.indexOf(', ')
+  if (split < 0) return
+  const accent = document.createElement('span')
+  accent.className = 'hero-title-accent'
+  accent.textContent = title.slice(split + 2)
+  heading.replaceChildren(document.createTextNode(title.slice(0, split + 2)), accent)
+}
+
 function setLink(selector: string, text?: string, href?: string) {
   const element = document.querySelector<HTMLAnchorElement>(selector)
   if (!element) return
@@ -1359,6 +1400,7 @@ function applySiteSections(sections: SiteSection[]) {
   }
   const byId = Object.fromEntries(sections.map((section) => [section.id, section])) as Record<string, SiteSection>
   setText('#hero-title', byId.home?.title)
+  styleHeroTitle()
   setText('.classic-restaurant-hero .hero-text', byId.home?.subtitle)
   setLink('.classic-restaurant-hero .primary-action', byId.home?.buttonText, byId.home?.buttonHref)
   setText('#popular-title', byId.popular?.title)
@@ -1396,6 +1438,12 @@ async function loadMenu() {
       categories = ['All', ...new Set(data.menu.map((item) => item.category))]
       document.querySelector<HTMLElement>('.category-tabs')!.innerHTML = categories.map((category) => `<button type="button" class="category-tab ${category === activeCategory ? 'active' : ''}" data-category="${escapeHtml(category)}">${escapeHtml(category)}</button>`).join('')
       if (!categories.includes(activeCategory)) activeCategory = 'All'
+      document.querySelector<HTMLElement>('#hero-menu-count')!.textContent = String(data.menu.length)
+      document.querySelectorAll<HTMLAnchorElement>('.popular-grid [data-popular-category]').forEach((link) => {
+        const dishes = data.menu.filter((item) => item.category === link.dataset.popularCategory)
+        const price = link.querySelector<HTMLElement>('span')!
+        price.textContent = dishes.length ? `From ${formatPrice(Math.min(...dishes.map((item) => item.price)))}` : 'Explore the menu'
+      })
       cart = sanitizeCart(cart)
       saveCart()
     }
@@ -1418,7 +1466,13 @@ async function loadStoreSettings() {
     document.querySelectorAll<HTMLAnchorElement>('a[href^="https://wa.me/"]').forEach((element) => { element.href = 'https://wa.me/' + storeSettings.whatsapp.replace(/\D/g, '') })
     document.querySelector<HTMLElement>('#restaurant-contact-details')!.textContent = [storeSettings.openingHours, storeSettings.address].filter(Boolean).join(' · ')
     document.querySelector<HTMLElement>('.hero-copy .eyebrow')!.textContent = storeSettings.restaurantName
-    document.querySelector<HTMLElement>('footer strong')!.innerHTML = `<img src="${escapeHtml(safeImageUrl(storeSettings.logoImage))}" alt=""/> ${escapeHtml(storeSettings.restaurantName)}`
+    document.querySelector<HTMLElement>('.footer-brand strong')!.innerHTML = `<img src="${escapeHtml(safeImageUrl(storeSettings.logoImage))}" alt=""/> ${escapeHtml(storeSettings.restaurantName)}`
+    document.querySelector<HTMLElement>('#footer-name')!.textContent = storeSettings.restaurantName
+    document.querySelector<HTMLElement>('#footer-phone')!.textContent = storeSettings.phone
+    document.querySelector<HTMLElement>('#footer-hours')!.textContent = storeSettings.openingHours
+    const footerAddress = document.querySelector<HTMLElement>('#footer-address')!
+    footerAddress.textContent = storeSettings.address
+    footerAddress.hidden = !storeSettings.address.trim()
     document.title = `${storeSettings.restaurantName} | Restaurant`
     const offersGrid = document.querySelector<HTMLElement>('#offers .feature-cards')
     if (offersGrid) offersGrid.innerHTML = data.offers.length ? data.offers.map((offer) => `<article class="deal-card"><span class="deal-kicker">Restaurant offer</span><strong>${escapeHtml(offer.title)}</strong><p>${escapeHtml(offer.description)}</p><a href="${escapeHtml(offer.link || '#menu')}">View offer</a></article>`).join('') : '<p>No offers available right now.</p>'
@@ -1472,6 +1526,7 @@ function renderMenu() {
 }
 
 function renderOrderSummary() {
+  orderSummary.hidden = !lastOrder
   orderSummary.innerHTML = lastOrder
     ? `
         <div class="latest-order-head">
@@ -1516,7 +1571,12 @@ function renderCart() {
   document.querySelector<HTMLElement>('#mobile-cart-total')!.textContent = formatPrice(total())
   headerCartNote.textContent = itemCount ? `${itemCount} item${itemCount === 1 ? '' : 's'} ready for checkout` : 'No items yet'
   cartStatus.textContent = itemCount === 1 ? '1 item' : `${itemCount} items`
+  document.querySelector<HTMLElement>('#cart-summary-items')!.innerHTML = items.length ? items.map((item) => `<div><span><b>${item.quantity}×</b> ${escapeHtml(item.name)}</span><strong>${formatPrice(item.price * item.quantity)}</strong></div>`).join('') : '<p>Your favorites will appear here.</p>'
+  document.querySelector<HTMLElement>('#cart-fulfillment-note')!.textContent = !items.length ? 'Add something delicious to get started.' : selectedOrderType() === 'Pickup' ? 'Pickup selected. No delivery fee.' : 'Delivery selected. Switch to pickup at checkout for no delivery fee.'
+  document.querySelector<HTMLElement>('#payment-step-label')!.textContent = selectedPaymentMethod() === 'Razorpay' ? 'Secure online payment' : 'Payment confirmation'
   clearCartButton.disabled = itemCount === 0
+  couponInput.disabled = itemCount === 0
+  applyCouponButton.disabled = itemCount === 0
   couponStatus.textContent = activeCoupon ? `Coupon ${activeCoupon} applied: -${formatPrice(discount())}` : 'No coupon applied'
   cartList.innerHTML = items.length
     ? items.map((item) => `
@@ -1542,7 +1602,7 @@ function renderCart() {
           </div>
         </div>
       `).join('')
-    : '<div class="empty-cart"><strong>Your cart is empty</strong><p>Add pizza, burger, momo, rolls, or drinks from the menu.</p><a href="#menu">Browse menu</a></div>'
+    : '<div class="empty-cart"><svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="14" y="20" width="36" height="34" rx="7"/><path d="M23 23V17a9 9 0 0 1 18 0v6M24 34h.01M40 34h.01M25 42q7 7 14 0"/></svg><strong>Good food starts here.</strong><p>Your cart is waiting for a little flavor. Find a favorite and make it yours.</p><a href="#menu">Explore the menu →</a></div>'
 
   document.querySelector<HTMLElement>('#subtotal')!.textContent = formatPrice(subtotal())
   document.querySelector<HTMLElement>('#discount')!.textContent = formatPrice(discount())

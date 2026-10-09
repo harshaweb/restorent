@@ -1,0 +1,271 @@
+/* The storefront's visual system; mobile.css keeps the touch layouts. */
+body:not(.admin-app) { background: #fffdf9; color: #29251f; }
+#app { --tomato: #df4433; --tomato-dark: #bb3426; --line: #e9e3da; }
+#app .site-header { padding: 18px max(28px, calc((100vw - 1280px) / 2)) !important; background: #fffdf9f5 !important; border-bottom: 1px solid #ebe5dc !important; box-shadow: none !important; }
+#app .brand { color: #29251f !important; gap: 12px; }
+#app .brand span { font-size: 20px !important; font-weight: 850; letter-spacing: -.6px; }
+#app .brand img { width: 44px !important; height: 44px !important; box-shadow: none !important; border: 0 !important; }
+#app .site-nav > a { font-size: 13px !important; font-weight: 650 !important; color: #5d584f !important; }
+#app .site-nav > a:hover { color: #bb3426 !important; }
+#app .nav-cart { background: #df4433 !important; border-color: #df4433 !important; box-shadow: none !important; border-radius: 10px !important; }
+#app .classic-restaurant-hero { position: relative; background: #fbf7ef !important; grid-template-columns: 1.05fr .95fr !important; align-items: center !important; gap: 64px !important; padding: 68px max(28px, calc((100vw - 1280px) / 2)) 64px !important; min-height: 0 !important; }
+#app .hero-copy { max-width: 620px !important; }
+#app .hero-copy .eyebrow { color: #3d6549 !important; display: inline-flex; align-items: center; gap: 8px; background: #eaf0e4 !important; border: 1px solid #dae4d1; border-radius: 100px; padding: 8px 12px; font-size: 10px !important; letter-spacing: 1.5px !important; }
+#app .hero-copy .eyebrow::before { content: ''; width: 6px; height: 6px; background: #608461; border-radius: 50%; margin: 0; box-shadow: none; }
+#app .classic-restaurant-hero h1 { color: #29251f !important; font-size: clamp(50px, 5.4vw, 78px) !important; font-weight: 850 !important; line-height: 1.02 !important; letter-spacing: -3px !important; max-width: 600px !important; margin: 18px 0 24px !important; }
+#app .hero-title-accent { display: block; font-family: Georgia, 'Times New Roman', serif; font-weight: 500; font-style: italic; letter-spacing: -3px; color: #ce432f; }
+#app .classic-restaurant-hero .hero-text { color: #6a645a !important; max-width: 540px !important; font-size: 16px !important; line-height: 1.8 !important; }
+#app .hero-actions { margin: 24px 0 22px !important; gap: 12px !important; }
+#app .primary-action, #app .secondary-action { min-height: 50px !important; border-radius: 10px !important; font-size: 14px !important; padding: 14px 23px !important; font-weight: 750 !important; box-shadow: none !important; }
+#app .primary-action { background: #df4433 !important; border: 1px solid #df4433 !important; color: #fff !important; }
+#app .secondary-action { color: #38372e !important; background: transparent !important; border: 1px solid #d8d0c3 !important; }
+#app .hero-search-card { background: #fffdf9 !important; border: 1px solid #e2dbd0 !important; border-radius: 12px !important; box-shadow: none !important; padding: 6px !important; grid-template-columns: minmax(0, 1fr) 104px !important; width: 100% !important; max-width: 540px; }
+#app .hero-search-card label { background: transparent !important; border: 0 !important; padding: 8px 12px !important; }
+#app .hero-search-card label span { color: #777163 !important; font-size: 9px !important; letter-spacing: 1.2px; }
+#app .hero-search-card input { color: #454134 !important; background: transparent !important; font-weight: 500 !important; font-size: 14px !important; }
+#app .hero-search-card > a { border-radius: 8px !important; background: #354f3c !important; font-size: 13px !important; min-height: 48px !important; min-width: 0 !important; width: 100% !important; padding: 12px !important; }
+#app .hero-trust-row { gap: 0 !important; margin-top: 24px !important; width: 100%; display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+#app .hero-trust-row > span { min-width: 0 !important; background: transparent !important; box-shadow: none !important; border: 0 !important; border-right: 1px solid #e2dbd0 !important; border-radius: 0 !important; padding: 0 14px !important; color: #777063 !important; font-size: 11px !important; line-height: 1.6; }
+#app .hero-trust-row > span:first-child { padding-left: 0 !important; }
+#app .hero-trust-row > span:last-child { border-right: 0 !important; }
+#app .hero-trust-row strong { color: #393d31 !important; font-size: 17px !important; font-weight: 750 !important; display: block; line-height: 1.35; margin-bottom: 4px; }
+#app .hero-restaurant-photo { height: 530px !important; width: 100%; aspect-ratio: auto !important; border: 0 !important; border-radius: 32px 32px 96px 32px !important; background: #eee7d9 !important; box-shadow: none !important; overflow: hidden; position: relative !important; transform: none !important; }
+#app .hero-shop-photo { inset: 0 !important; width: 100% !important; height: 100% !important; border: 0 !important; border-radius: inherit !important; object-fit: cover !important; object-position: center !important; }
+#app .hero-visual-stamp { position: absolute; z-index: 2; right: 22px; top: 22px; width: 104px; height: 104px; background: #fff4d8; border: 1px solid #e9d49b; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; color: #5d4e2d; font-size: 8px; font-weight: 800; letter-spacing: 1.5px; transform: rotate(10deg); box-shadow: 0 6px 20px #30271f0f; }
+#app .hero-visual-stamp span { font-family: Georgia, serif; font-size: 19px; font-weight: 500; font-style: italic; letter-spacing: -.5px; }
+#app .hero-image-caption { position: absolute; z-index: 2; bottom: 22px !important; left: 22px !important; right: 22px !important; background: #fffdf9 !important; border: 1px solid #eee5d5 !important; border-radius: 16px !important; padding: 18px 20px !important; display: flex !important; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 8px 24px #28201b14; }
+#app .hero-image-caption span { color: #726858 !important; font-size: 9px !important; letter-spacing: 1.3px; font-weight: 750; }
+#app .hero-image-caption strong { display: block; color: #302e25 !important; font-family: Georgia, serif; font-size: 23px !important; font-weight: 500 !important; line-height: 1.15; margin-top: 7px; }
+#app .hero-image-caption a { display: flex; align-items: center; justify-content: center; color: #fff; background: #354f3c; border-radius: 50%; width: 48px; height: 48px; flex-shrink: 0; font-size: 25px; }
+#app main > section:not(.hero-section):not(.order-section) { padding: 70px max(28px, calc((100vw - 1280px) / 2)) !important; background: #fffdf9 !important; border: 0 !important; }
+#app .section-heading { margin-bottom: 30px !important; }
+#app .section-heading .eyebrow, #app .booking-copy .eyebrow, #app .about-section .eyebrow, #app .contact-section .eyebrow { color: #8c6444 !important; background: transparent !important; padding: 0 !important; border: 0 !important; letter-spacing: 1.8px !important; font-size: 10px !important; }
+#app main h2 { color: #302e27 !important; font-size: clamp(28px, 3vw, 42px) !important; line-height: 1.15 !important; font-weight: 750 !important; letter-spacing: -1.5px !important; }
+#app [data-section-description] { color: #797267; max-width: 560px; font-size: 14px; line-height: 1.7; }
+#app .section-heading .options-main-action, #app .offers-view-all { background: transparent !important; color: #354f3c !important; border: 1px solid #d7dfd0 !important; border-radius: 100px !important; box-shadow: none !important; min-height: 44px; padding: 12px 18px !important; font-size: 12px !important; font-weight: 750; }
+#app main > .service-band { padding-block: 28px !important; gap: 0 !important; border-bottom: 1px solid #e9e3da !important; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+#app .service-band article { display: grid !important; grid-template-columns: 40px minmax(0, 1fr); align-content: start; column-gap: 14px; row-gap: 5px; border: 0 !important; border-right: 1px solid #e9e3da !important; border-radius: 0 !important; background: transparent !important; box-shadow: none !important; padding: 8px 28px !important; min-height: 0 !important; transform: none !important; }
+#app .service-band article:first-child { padding-left: 0 !important; }
+#app .service-band article:last-child { border-right: 0 !important; }
+#app .service-top { grid-column: 1; grid-row: 1 / 4; margin: 0 !important; display: block; }
+#app .service-top span { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: #354f3c !important; background: #eef1e8 !important; border: 0 !important; border-radius: 50%; font-size: 11px !important; }
+#app .service-top small, #app .service-band ul { display: none !important; }
+#app .service-band h3 { grid-column: 2; font-size: 16px !important; color: #39372f !important; margin: 0 !important; }
+#app .service-band p { grid-column: 2; color: #797267 !important; font-size: 12px !important; line-height: 1.7; margin: 0 !important; }
+#app .service-band a { grid-column: 2; padding: 3px 0 !important; background: transparent !important; border: 0 !important; color: #a84432 !important; font-size: 11px !important; min-height: 30px; }
+#app .popular-grid { display: grid !important; grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 22px !important; }
+#app .popular-grid a { position: relative; display: grid !important; grid-template-columns: minmax(0, 1fr) 36px; grid-template-rows: 200px auto; gap: 16px 12px; background: transparent !important; border: 0 !important; padding: 0 !important; box-shadow: none !important; border-radius: 0 !important; overflow: visible !important; min-height: 0 !important; transform: none !important; }
+#app .popular-grid a::after { display: none !important; }
+#app .popular-grid img { grid-column: 1 / -1; position: static !important; width: 100% !important; height: 200px !important; object-fit: cover; border-radius: 20px !important; filter: none !important; opacity: 1 !important; }
+#app .popular-grid a > div { min-width: 0; }
+#app .popular-grid strong { position: static !important; color: #302e27 !important; font-size: 19px !important; font-weight: 750 !important; display: block; margin: 0 0 5px !important; }
+#app .popular-grid span { position: static !important; color: #8a7b65 !important; font-size: 12px !important; }
+#app .popular-grid b { width: 36px; height: 36px; border: 1px solid #ddd4c6; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #5b684b; font-size: 18px; align-self: center; }
+#app .popular-grid a:hover img { transform: translateY(-4px); }
+#app .popular-grid img { transition: transform 180ms ease; }
+#app main > #offers { background: #f3f2e9 !important; }
+#app .feature-cards { gap: 20px !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+#app .deal-card { background: #fffdf9 !important; border: 1px solid #e0e2d3 !important; border-radius: 18px !important; box-shadow: none !important; padding: 26px !important; color: #34422f !important; min-height: 220px; }
+#app .deal-card::after, #app .deal-card::before { display: none !important; }
+#app .deal-card:first-child { background: #fceee4 !important; border-color: #f0dcca !important; }
+#app .deal-kicker { color: #8e775b !important; background: transparent !important; border: 0 !important; padding: 0 !important; font-size: 9px !important; letter-spacing: 1.6px; }
+#app .deal-card > strong { color: #37472f !important; font-family: Georgia, serif; font-size: 29px !important; font-weight: 500 !important; letter-spacing: -.7px; }
+#app .deal-card p { color: #7c7162 !important; font-size: 13px !important; line-height: 1.7; }
+#app .deal-card a { background: transparent !important; color: #a84432 !important; padding: 8px 0 !important; border: 0 !important; border-radius: 0 !important; font-size: 12px !important; font-weight: 750; }
+#app .menu-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 26px !important; }
+#app .dish-card { background: #fffdf9 !important; border: 1px solid #e9e3da !important; border-radius: 18px !important; display: flex !important; flex-direction: column !important; padding: 0 !important; overflow: hidden; box-shadow: none !important; transform: none !important; }
+#app .dish-card:hover { box-shadow: 0 12px 28px #3c2e1d0a !important; border-color: #d4c4ae !important; }
+#app .dish-photo { width: 100% !important; height: 220px !important; min-height: 0 !important; border-radius: 0 !important; }
+#app .dish-photo img { width: 100% !important; height: 100% !important; filter: none !important; object-fit: cover; opacity: 1 !important; }
+#app .dish-photo::after { display: none !important; }
+#app .dish-photo > span { left: 14px !important; top: 14px !important; bottom: auto !important; background: #fffdf9 !important; color: #655b4c !important; border: 1px solid #eee1cb !important; border-radius: 100px !important; font-size: 10px !important; padding: 6px 10px !important; }
+#app .dish-body { display: flex; flex-direction: column; gap: 14px !important; padding: 20px !important; flex: 1; }
+#app .dish-title { align-items: start; gap: 10px; display: flex !important; justify-content: space-between; }
+#app .dish-title h3 { color: #302e27 !important; font-size: 17px !important; line-height: 1.35; font-weight: 750; margin: 0 !important; }
+#app .dish-title > strong { color: #b43e2b !important; font-size: 16px !important; margin: 0 !important; white-space: nowrap; }
+#app .dish-body > p { color: #817969 !important; display: block !important; font-size: 12px !important; line-height: 1.65; margin: 0 !important; }
+#app .dish-meta { gap: 6px !important; flex-wrap: wrap; margin: 0 !important; }
+#app .dish-meta span { background: #f3f1e9 !important; color: #6e705e !important; border: 0 !important; font-size: 9px !important; padding: 5px 8px !important; }
+#app .dish-actions { margin-top: auto; display: grid !important; grid-template-columns: 1fr 1.5fr; gap: 10px !important; }
+#app .dish-actions button { min-height: 44px !important; border-radius: 9px !important; box-shadow: none !important; padding: 10px !important; font-size: 12px !important; font-weight: 750 !important; background: #df4433 !important; border: 1px solid #df4433 !important; color: #fff !important; }
+#app .dish-actions .view-dish-button { background: transparent !important; color: #5d614d !important; border: 1px solid #dce0d3 !important; }
+#app .menu-tools { gap: 14px !important; }
+#app .menu-search { background: #fffdf9 !important; border: 1px solid #e4ded2 !important; border-radius: 12px !important; box-shadow: none !important; }
+#app .menu-search span { color: #726952 !important; font-size: 9px !important; letter-spacing: 1px; }
+#app .menu-search input { background: transparent !important; color: #39372f !important; font-size: 14px !important; }
+#app .veg-toggle { background: #edf1e8 !important; border: 1px solid #dfe5d5 !important; color: #496247 !important; border-radius: 10px !important; padding: 12px !important; font-size: 12px !important; }
+#app .category-tabs { gap: 8px !important; background: transparent !important; padding: 0 0 14px !important; border: 0 !important; border-radius: 0 !important; }
+#app .category-tab { border: 1px solid #e1ddcf !important; background: #fffdf9 !important; color: #6d6759 !important; box-shadow: none !important; border-radius: 100px !important; padding: 10px 18px !important; font-size: 12px !important; min-height: 42px; }
+#app .category-tab.active { background: #354f3c !important; color: #fff !important; border-color: #354f3c !important; }
+#app main > .app-features-section, #app main > .about-section { background: #f7f4ed !important; }
+#app .app-feature-grid, #app .options-grid { gap: 16px !important; }
+#app .app-feature-grid article, #app .options-grid article, #app .review-grid article, #app .info-section article { background: #fffdf9 !important; border: 1px solid #e9e3da !important; border-radius: 14px !important; box-shadow: none !important; padding: 24px !important; transform: none !important; }
+#app .app-feature-grid strong, #app .options-grid strong { color: #3d4f37 !important; font-size: 16px !important; }
+#app .app-feature-grid span, #app .options-grid p { color: #817969 !important; font-size: 12px !important; line-height: 1.7; }
+#app .options-grid article > span { color: #9a7952 !important; font-size: 10px !important; background: transparent !important; border: 0 !important; padding: 0 !important; }
+#app .options-grid a { background: transparent !important; color: #a84432 !important; border: 0 !important; padding: 6px 0 !important; font-size: 12px !important; }
+#app .about-section > img { border-radius: 24px !important; border: 0 !important; box-shadow: none !important; }
+#app .about-section p, #app .booking-copy > p, #app .contact-section p { color: #797267 !important; line-height: 1.8 !important; }
+#app .about-list span { background: #e8eee2 !important; color: #4d6546 !important; border: 0 !important; border-radius: 100px !important; font-size: 11px !important; }
+#app .review-grid article > strong { color: #b94531 !important; font-family: Georgia, serif; font-size: 24px !important; font-weight: 500 !important; }
+#app .review-grid p { color: #6c6558 !important; font-size: 14px !important; line-height: 1.8 !important; }
+#app .review-grid span { color: #9b8f7b !important; font-size: 11px !important; }
+#app .booking-panel { background: #fffdf9 !important; border: 1px solid #e3dfd3 !important; border-radius: 20px !important; box-shadow: none !important; }
+#app .booking-form label { border: 1px solid #e7e1d4 !important; background: #fcfaf5 !important; border-radius: 10px !important; }
+#app .booking-form label > span { color: #796e59 !important; font-size: 10px !important; }
+#app .booking-form input, #app .booking-form textarea, #app .booking-form select { color: #39372f !important; background: transparent !important; font-size: 15px; }
+#app .booking-form button, #app .newsletter-form button { background: #354f3c !important; border-radius: 10px !important; box-shadow: none !important; }
+#app .booking-min-details span { color: #617255 !important; background: #edf1e8 !important; border: 0 !important; }
+#app .booking-service-note { color: #6a725b !important; background: #f1f3eb !important; border: 0 !important; border-radius: 12px !important; }
+#app .faq-section details { background: #fffdf9 !important; border: 0 !important; border-bottom: 1px solid #e7e0d4 !important; border-radius: 0 !important; box-shadow: none !important; }
+#app .faq-section summary { color: #4c4a3d !important; font-size: 15px !important; }
+#app .faq-section details p { color: #817969 !important; }
+#app .contact-actions a { background: #fffdf9 !important; color: #4c6345 !important; border: 1px solid #dfe4d5 !important; border-radius: 10px !important; }
+#app .newsletter-form { background: #f4f2e9 !important; border: 1px solid #e3dfd0 !important; border-radius: 16px !important; box-shadow: none !important; }
+#app .newsletter-form label { background: #fffdf9 !important; border: 1px solid #e6dfd0 !important; border-radius: 10px !important; }
+#app .newsletter-form label span { color: #796e59 !important; }
+#app footer { background: #35483a !important; color: #fffdf9 !important; border: 0 !important; padding: 32px max(28px, calc((100vw - 1280px) / 2)) !important; }
+#app footer strong { color: #fffdf9 !important; font-size: 20px !important; }
+#app footer a { color: #e3e8dc !important; font-size: 12px !important; }
+#app a:focus-visible, #app button:focus-visible { outline: 3px solid #567650; outline-offset: 4px; }
+
+@media (min-width: 761px) and (max-width: 1080px) {
+  #app .classic-restaurant-hero { grid-template-columns: 1fr 1fr !important; gap: 32px !important; padding: 48px 28px !important; }
+  #app .classic-restaurant-hero h1 { font-size: 50px !important; }
+  #app .hero-restaurant-photo { height: 480px !important; }
+  #app .hero-trust-row > span { padding-inline: 8px !important; font-size: 10px !important; }
+  #app .hero-trust-row strong { font-size: 13px !important; }
+  #app .popular-grid { gap: 16px !important; }
+  #app .popular-grid a { grid-template-rows: 150px auto; }
+  #app .popular-grid img { height: 150px !important; }
+  #app .menu-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 760px) {
+  #app .hero-title-accent { letter-spacing: -1px; }
+  #app .hero-visual-stamp { width: 78px; height: 78px; font-size: 6px; right: 16px; top: 16px; }
+  #app .hero-visual-stamp span { font-size: 15px; }
+  #app .hero-trust-row strong { font-size: 13px !important; }
+  #app .hero-image-caption strong br { display: none; }
+  #app .hero-image-caption a { width: 44px; height: 44px; font-size: 22px; }
+  #app main > .service-band { gap: 16px !important; padding-block: 24px !important; }
+  #app .service-band article { border-right: 0 !important; padding: 0 !important; }
+  #app .service-band article:not(:last-child) { padding-bottom: 16px !important; border-bottom: 1px solid #e9e3da !important; }
+  #app .service-band a { min-height: 44px; display: inline-flex; align-items: center; }
+  #app .popular-grid a { grid-template-rows: 140px auto; gap: 12px 8px; }
+  #app .popular-grid img { height: 140px !important; border-radius: 14px !important; }
+  #app .popular-grid strong { font-size: 17px !important; }
+  #app .popular-grid span { font-size: 11px !important; }
+  #app .popular-grid b { width: 30px; height: 30px; }
+  #app .dish-photo { height: 210px !important; }
+  #app .dish-body { padding: 18px !important; }
+  #app .dish-title h3 { font-size: 17px !important; }
+  #app .dish-body > p { font-size: 13px !important; }
+  #app .deal-card { padding: 24px !important; min-height: 0; }
+}
+
+/* Offers stay close to their heading, with compact rows on phones. */
+body:not(.cart-page-active) #app #offers { display: grid !important; }
+#app #offers { grid-template-columns: 260px minmax(0, 1fr); align-items: center; gap: 28px; padding: 34px max(28px, calc((100vw - 1280px) / 2)) !important; }
+#app #offers .section-heading { flex-direction: column; align-items: flex-start !important; gap: 12px !important; margin: 0 !important; }
+#app #offers .eyebrow { font-size: 9px !important; margin: 0 0 8px !important; }
+#app #offers h2 { font-size: 28px !important; line-height: 1.15 !important; letter-spacing: -.8px !important; margin: 0 !important; }
+#app #offers [data-section-description] { margin: 10px 0 0; font-size: 12px; line-height: 1.6; }
+#app #offers .offers-view-all { min-height: 44px; padding: 10px 14px !important; font-size: 11px !important; }
+#app #offers .feature-cards { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 10px !important; }
+#app #offers .deal-card { display: flex !important; flex-direction: column; gap: 7px !important; min-width: 0; min-height: 0 !important; padding: 16px !important; border-radius: 12px !important; }
+#app #offers .deal-kicker { height: auto; font-size: 9px !important; line-height: 1.4; letter-spacing: 1px; margin: 0; }
+#app #offers .deal-card > strong { font-size: 22px !important; line-height: 1.2 !important; letter-spacing: -.4px; margin: 0 !important; }
+#app #offers .deal-card p { font-size: 12px !important; line-height: 1.5 !important; margin: 0 !important; }
+#app #offers .deal-card a { min-height: 44px; margin-top: auto; display: inline-flex; align-items: center; font-size: 12px !important; padding: 4px 0 !important; }
+#app #offers .deal-meta { gap: 5px; margin: 0; }
+#app #offers .deal-meta span { font-size: 9px; padding: 4px 6px; }
+@media (max-width: 960px) {
+  #app #offers { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 28px 20px !important; }
+  #app #offers .section-heading { flex-direction: row; align-items: center !important; justify-content: space-between; }
+  #app #offers .section-heading > div { min-width: 0; }
+  #app #offers h2 { font-size: 26px !important; }
+  #app #offers .offers-view-all { flex-shrink: 0; }
+}
+@media (max-width: 600px) {
+  #app #offers { padding: 26px 16px !important; gap: 16px; }
+  #app #offers .section-heading { flex-direction: column; align-items: flex-start !important; }
+  #app #offers .feature-cards { grid-template-columns: minmax(0, 1fr) !important; gap: 8px !important; }
+  #app #offers .deal-card { display: grid !important; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px !important; padding: 14px !important; }
+  #app #offers .deal-kicker { grid-column: 1; }
+  #app #offers .deal-card > strong { grid-column: 1; font-size: 20px !important; }
+  #app #offers .deal-card p, #app #offers .deal-meta { grid-column: 1 / -1; }
+  #app #offers .deal-card a { grid-column: 2; grid-row: 1 / 3; align-self: center; margin: 0; font-size: 11px !important; }
+}
+
+/* Keep the ordering features in a small, readable band. */
+body:not(.cart-page-active) #app main > .app-features-section { display: grid !important; }
+#app main > section.app-features-section:not(.hero-section):not(.order-section) { grid-template-columns: 290px minmax(0, 1fr); align-items: center; gap: 28px; padding: 34px max(28px, calc((100vw - 1280px) / 2)) !important; }
+#app .app-features-section .section-heading { margin: 0 !important; gap: 0 !important; }
+#app .app-features-section .eyebrow { font-size: 9px !important; margin: 0 0 8px !important; }
+#app .app-features-section h2 { font-size: 28px !important; line-height: 1.15 !important; letter-spacing: -.8px !important; margin: 0 !important; }
+#app .app-features-section [data-section-description] { margin: 10px 0 0; font-size: 12px; line-height: 1.6; }
+#app .app-features-section .app-feature-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 10px !important; }
+#app .app-features-section .app-feature-grid article { display: flex !important; flex-direction: column; gap: 6px !important; min-width: 0; min-height: 0 !important; padding: 14px 16px !important; border-radius: 10px !important; }
+#app .app-features-section .app-feature-grid strong { font-size: 15px !important; line-height: 1.3 !important; margin: 0 !important; }
+#app .app-features-section .app-feature-grid span { font-size: 12px !important; line-height: 1.5 !important; margin: 0 !important; }
+@media (max-width: 960px) {
+  #app main > section.app-features-section:not(.hero-section):not(.order-section) { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 28px 20px !important; }
+  #app .app-features-section h2 { font-size: 26px !important; }
+}
+@media (max-width: 600px) {
+  #app main > section.app-features-section:not(.hero-section):not(.order-section) { padding: 26px 16px !important; gap: 16px; }
+  #app .app-features-section .app-feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px !important; }
+  #app .app-features-section .app-feature-grid article { padding: 12px !important; }
+  #app .app-features-section .app-feature-grid strong { font-size: 14px !important; }
+}
+
+/* Compact service tiles retain every option and its action. */
+#app main > section.restaurant-options:not(.hero-section):not(.order-section) { padding: 34px max(28px, calc((100vw - 1280px) / 2)) !important; }
+#app .restaurant-options .section-heading { margin-bottom: 18px !important; gap: 16px !important; }
+#app .restaurant-options .eyebrow { font-size: 9px !important; margin: 0 0 6px !important; }
+#app .restaurant-options h2 { font-size: 28px !important; line-height: 1.15 !important; letter-spacing: -.8px !important; margin: 0 !important; }
+#app .restaurant-options [data-section-description] { margin: 8px 0 0; font-size: 12px; line-height: 1.6; }
+#app .restaurant-options .options-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 10px !important; }
+#app .restaurant-options .options-grid article { display: flex !important; flex-direction: column; gap: 6px !important; min-width: 0; min-height: 0 !important; padding: 14px 16px !important; border-radius: 10px !important; }
+#app .restaurant-options .options-grid article > span { display: none; }
+#app .restaurant-options .options-grid strong { font-size: 15px !important; line-height: 1.3 !important; margin: 0 !important; }
+#app .restaurant-options .options-grid p { font-size: 12px !important; line-height: 1.5 !important; margin: 0 !important; }
+#app .restaurant-options .options-grid a { margin-top: auto; min-height: 44px; padding: 4px 0 !important; font-size: 12px !important; line-height: 1.3; }
+@media (max-width: 980px) {
+  #app main > section.restaurant-options:not(.hero-section):not(.order-section) { padding: 28px 20px !important; }
+  #app .restaurant-options .options-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  #app .restaurant-options h2 { font-size: 26px !important; }
+}
+@media (max-width: 600px) {
+  #app main > section.restaurant-options:not(.hero-section):not(.order-section) { padding: 26px 16px !important; }
+  #app .restaurant-options .section-heading { gap: 12px !important; margin-bottom: 16px !important; }
+  #app .restaurant-options .options-grid { gap: 8px !important; }
+  #app .restaurant-options .options-grid article { padding: 12px !important; }
+  #app .restaurant-options .options-grid strong { font-size: 14px !important; }
+  #app .restaurant-options .options-grid a { font-size: 11px !important; }
+}
+
+/* A compact review band keeps the customer comments close to their heading. */
+body:not(.cart-page-active) #app #reviews { display: grid !important; }
+#app #reviews { grid-template-columns: 260px minmax(0, 1fr); gap: 30px; align-items: center; padding: 38px max(28px, calc((100vw - 1280px) / 2)) !important; }
+#app #reviews .section-heading { margin: 0 !important; gap: 0 !important; }
+#app #reviews .section-heading .eyebrow { margin: 0 0 8px !important; font-size: 9px !important; }
+#app #reviews h2 { font-size: 28px !important; line-height: 1.15 !important; letter-spacing: -.8px !important; margin: 0 !important; }
+#app #reviews [data-section-description] { font-size: 12px; line-height: 1.6; margin: 10px 0 0; }
+#app #reviews .review-grid { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 12px !important; }
+#app #reviews .review-grid article { display: flex !important; flex-direction: column; gap: 8px; min-width: 0; min-height: 0 !important; padding: 18px !important; border-radius: 12px !important; }
+#app #reviews .review-grid strong { font-size: 18px !important; line-height: 1.3; margin: 0 !important; }
+#app #reviews .review-grid p { font-size: 12px !important; line-height: 1.65 !important; margin: 0 !important; }
+#app #reviews .review-grid span { font-size: 10px !important; line-height: 1.5; margin-top: auto; }
+@media (max-width: 960px) {
+  #app #reviews { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 30px 20px !important; }
+  #app #reviews h2 { font-size: 26px !important; }
+}
+@media (max-width: 600px) {
+  #app #reviews { padding: 26px 16px !important; gap: 18px; }
+  #app #reviews .review-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 0 !important; border-top: 1px solid #e9e3da; }
+  #app #reviews .review-grid article { display: grid !important; grid-template-columns: 100px minmax(0, 1fr); gap: 4px 14px; padding: 14px 0 !important; border: 0 !important; border-bottom: 1px solid #e9e3da !important; border-radius: 0 !important; }
+  #app #reviews .review-grid strong { grid-column: 1; grid-row: 1 / 3; align-self: center; font-family: inherit; font-size: 14px !important; font-weight: 700 !important; }
+  #app #reviews .review-grid p { grid-column: 2; font-size: 13px !important; line-height: 1.6 !important; }
+  #app #reviews .review-grid span { grid-column: 2; margin: 0; }
+}

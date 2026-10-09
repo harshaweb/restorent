@@ -1,0 +1,55 @@
+#app #site-footer {
+  display: block;
+  background: #f3f2e9 !important;
+  color: #5d6556 !important;
+  border: 0 !important;
+  border-top: 1px solid #e0e3d4 !important;
+  padding: 30px max(28px, calc((100vw - 1280px) / 2)) 16px !important;
+}
+#app #site-footer div { display: block; }
+#app #site-footer p { margin: 0; }
+#app #site-footer a { min-height: 44px; font-size: 13px !important; color: #3d5140 !important; }
+#app #site-footer a:hover { color: #9d3f2d !important; }
+#app #site-footer .footer-invite { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-bottom: 24px; border-bottom: 1px solid #dce0d0; }
+#app #site-footer .footer-eyebrow { font-size: 9px; color: #747c65; text-transform: uppercase; letter-spacing: 1.6px; font-weight: 750; margin-bottom: 8px; }
+#app #site-footer h2 { color: #304334; font-size: clamp(24px, 2.5vw, 34px); font-family: Georgia, 'Times New Roman', serif; font-weight: 500; letter-spacing: -.6px; line-height: 1.2; margin: 0; }
+#app #site-footer .footer-order { display: inline-flex; align-items: center; justify-content: center; gap: 24px; flex-shrink: 0; background: #354f3c; color: #fffdf9 !important; border: 1px solid #354f3c; border-radius: 10px; padding: 10px 18px; }
+#app #site-footer .footer-order:hover { background: #263f2c; }
+#app #site-footer .footer-order span { font-size: 20px; font-weight: 400; }
+#app #site-footer .footer-main { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, .7fr) minmax(0, 1fr); gap: 40px; padding: 26px 0 22px; }
+#app #site-footer .footer-brand { display: inline-flex; align-items: center; }
+#app #site-footer .footer-brand strong { color: #304334 !important; font-size: 21px !important; line-height: 1.3; }
+#app #site-footer .footer-brand img { width: 44px; height: 44px; flex-shrink: 0; border: 2px solid #fffdf9; }
+#app #site-footer .footer-story > p { max-width: 330px; margin-top: 12px; font-size: 13px; line-height: 1.7; }
+#app #site-footer .footer-services { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+#app #site-footer .footer-services span { border: 1px solid #dbe0d1; border-radius: 100px; padding: 5px 9px; font-size: 10px; color: #58704d; }
+#app #site-footer h3 { color: #304334; font-size: 12px; font-weight: 800; line-height: 1.5; margin: 0 0 10px; }
+#app #site-footer .footer-links { display: grid; align-content: start; justify-items: start; gap: 0; }
+#app #site-footer .footer-links a { display: inline-flex; align-items: center; }
+#app #site-footer .footer-contact { min-width: 0; }
+#app #site-footer .footer-contact p { font-size: 12px; line-height: 1.7; max-width: 320px; }
+#app #site-footer .footer-contact #footer-address { margin-top: 5px; }
+#app #site-footer .footer-contact a { display: flex; align-items: center; gap: 8px; width: fit-content; }
+#app #site-footer #footer-phone { margin-top: 4px; font-size: 16px !important; font-weight: 750; }
+#app #site-footer .footer-whatsapp { font-weight: 600; }
+#app #site-footer .footer-bottom { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; padding-top: 14px; border-top: 1px solid #dce0d0; }
+#app #site-footer .footer-bottom p { font-size: 10px; line-height: 1.7; }
+#app #site-footer .footer-payments span { color: #7c8270; margin-right: 8px; }
+#app #site-footer .footer-back-top { display: inline-flex; align-items: center; gap: 10px; font-size: 11px !important; }
+@media (max-width: 960px) {
+  #app #site-footer { padding: 28px 20px 16px !important; }
+  #app #site-footer .footer-main { gap: 26px; grid-template-columns: minmax(0, 1.2fr) minmax(0, .7fr) minmax(0, 1fr); }
+  #app #site-footer .footer-brand strong { font-size: 18px !important; }
+}
+@media (max-width: 600px) {
+  #app #site-footer { padding: 24px 16px 12px !important; }
+  #app #site-footer .footer-invite { align-items: start; flex-direction: column; gap: 16px; padding-bottom: 20px; }
+  #app #site-footer h2 { max-width: 300px; font-size: 27px; }
+  #app #site-footer .footer-order { width: 100%; justify-content: space-between; }
+  #app #site-footer .footer-main { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 24px 16px; padding: 22px 0 18px; }
+  #app #site-footer .footer-story { grid-column: 1 / -1; }
+  #app #site-footer .footer-story > p { max-width: 360px; }
+  #app #site-footer .footer-contact h3 { max-width: 155px; }
+  #app #site-footer .footer-bottom { gap: 8px; }
+  #app #site-footer .footer-bottom p { width: 100%; }
+}
